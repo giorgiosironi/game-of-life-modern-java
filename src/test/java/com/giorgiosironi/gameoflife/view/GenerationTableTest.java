@@ -10,7 +10,18 @@ public class GenerationTableTest {
 	public void testRendersATableRepresentingAnAreaOfThePlaneStartingFromTheOrigin() {
 		GenerationTable table = new GenerationTable(2, 3);
 		assertEquals(
-			"",
+			"<table>"
+			+ "<tr>"
+			+ "<td></td>"
+			+ "<td></td>"
+			+ "<td></td>"
+			+ "</tr>"
+			+ "<tr>"
+			+ "<td></td>"
+			+ "<td></td>"
+			+ "<td></td>"
+			+ "</tr>"
+			+ "</table>",
 			table.toString()
 		);
 		

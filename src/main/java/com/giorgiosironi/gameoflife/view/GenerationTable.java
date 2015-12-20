@@ -15,7 +15,16 @@ public class GenerationTable {
 	}
 
 	public String toString() {
-		return "";
+		String representation = "<table>";
+		for (int x = 0; x < rows; x++) {
+			representation += "<tr>";
+			for (int y = 0; y < columns; y++) {
+				representation += "<td></td>";
+			}
+			representation += "</tr>";
+		}
+		representation += "</table>";
+		return representation;
 	}
 
 }
