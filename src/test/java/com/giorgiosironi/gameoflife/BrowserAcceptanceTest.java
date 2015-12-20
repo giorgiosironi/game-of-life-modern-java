@@ -14,15 +14,22 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 public class BrowserAcceptanceTest {
 
 	private static WebDriver driver;
+	private Application application;
+	private Thread applicationThread;
 
 	@Before
 	public void setUp() throws Exception {
 		driver = new FirefoxDriver();
+		application = new Application();
+		applicationThread = new Thread(application);
+		applicationThread.start();
+		application.waitForStartup();
 	}
 	
 	@After
 	public void tearDown() {
 		driver.quit();
+		application.stop();
 	}
 
 	@Test
