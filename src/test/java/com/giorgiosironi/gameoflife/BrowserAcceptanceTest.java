@@ -2,6 +2,8 @@ package com.giorgiosironi.gameoflife;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,10 +35,13 @@ public class BrowserAcceptanceTest {
 	}
 
 	@Test
-	public void test() throws InterruptedException {
+	public void testLoadsTheFirstGenerationInTheBrowser() throws InterruptedException {
 		driver.get("http://localhost:8080");
-		WebElement element = driver.findElement(By.cssSelector("h1"));
-		assertEquals("Game Of Life", element.getText());
+		WebElement title = driver.findElement(By.cssSelector("h1"));
+		assertEquals("Game Of Life", title.getText());
+		WebElement generation = driver.findElement(By.cssSelector("table"));
+		List<WebElement> cells = generation.findElements(By.cssSelector("td"));
+		assertEquals(100, cells.size());
 	}
 
 }

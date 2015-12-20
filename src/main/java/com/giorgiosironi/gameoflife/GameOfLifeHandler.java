@@ -12,6 +12,8 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
+import com.giorgiosironi.gameoflife.view.GenerationTable;
+
 public class GameOfLifeHandler extends AbstractHandler implements Handler {
 	@Override
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
@@ -20,6 +22,7 @@ public class GameOfLifeHandler extends AbstractHandler implements Handler {
 		response.setStatus(HttpServletResponse.SC_OK);
 		PrintWriter out = response.getWriter();
 		out.println("<h1>Game Of Life</h1>");
+		out.println(new GenerationTable());
 		baseRequest.setHandled(true);
 	}
 }
