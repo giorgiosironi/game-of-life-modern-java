@@ -1,6 +1,7 @@
 package com.giorgiosironi.gameoflife;
 
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
 
 public class Application implements Runnable {
 
@@ -17,7 +18,9 @@ public class Application implements Runnable {
 			synchronized (startedNotification) {
 				started = false;
 				server = new Server(8080);
-				server.setHandler(new GameOfLifeHandler());
+				ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+				context.setContextPath("/");context.addServlet(GameOfLifeServlet.class, "/");
+				server.setHandler(context);
 				server.start();
 				started = true;	
 				startedNotification.notify();
