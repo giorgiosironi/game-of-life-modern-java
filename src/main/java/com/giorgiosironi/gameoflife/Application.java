@@ -17,6 +17,7 @@ public class Application implements Runnable {
 			synchronized (startedNotification) {
 				started = false;
 				server = new Server(8080);
+				server.setHandler(new GameOfLifeHandler());
 				server.start();
 				started = true;	
 				startedNotification.notify();
