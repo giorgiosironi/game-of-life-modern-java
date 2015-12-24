@@ -32,4 +32,5 @@ dependencies {
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
     testCompile 'org.seleniumhq.selenium:selenium-server:2.48.2'
+    testCompile 'org.mockito:mockito-core:1.+'
 }
