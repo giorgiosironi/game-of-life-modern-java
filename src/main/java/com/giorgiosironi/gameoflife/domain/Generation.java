@@ -5,6 +5,7 @@ import java.util.Set;
 
 public final class Generation {
 
+	// TODO: rename to aliveCells?
 	private Set<Cell> set;
 
 	public Generation(Set<Cell> set) {
@@ -15,9 +16,11 @@ public final class Generation {
 		this.set = new HashSet<Cell>();
 	}
 
-	public static Generation withAliveCells(Cell theOnlyAliveOne) {
+	public static Generation withAliveCells(Cell... cells) {
 		Set<Cell> set = new HashSet<Cell>();
-		set.add(theOnlyAliveOne);
+		for (int i = 0; i < cells.length; i++) {
+			set.add(cells[i]);
+		}
 		return new Generation(set);
 	}
 
@@ -26,7 +29,25 @@ public final class Generation {
 	}
 
 	public Generation evolve() {
-		return new Generation();
+		Zone toCalculate = Zone.empty();
+		for (Cell alive : set) {
+			toCalculate = toCalculate.union(alive.block());
+		}
+		Set<Cell> newGeneration = new HashSet<Cell>();
+		// TODO: try Zone.map with Java 8 closures?
+		// TODO: Zone.countAlive(AliveRegister register);
+		for (Cell candidate : toCalculate) {
+			int aliveNeighbors = 0;
+			for (Cell neighbor : candidate.neighbors()) {
+				if (isAlive(neighbor)) {
+					aliveNeighbors++;
+				}
+			}
+			if (isAlive(candidate) && aliveNeighbors >= 2) {
+				newGeneration.add(candidate);
+			}
+		}
+		return new Generation(newGeneration);
 	}
 
 	public int countAlive() {

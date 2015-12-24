@@ -20,5 +20,13 @@ public class GenerationTest {
 		Generation second = first.evolve();
 		assertEquals(0, second.countAlive());
 	}
+	
+	@Test
+	public void a2By2BlockWillRemainFixedForEternity()
+	{
+		Generation first = Generation.withAliveCells(Cell.onXAndY(0, 0), Cell.onXAndY(0, 1), Cell.onXAndY(1, 0), Cell.onXAndY(1, 1));
+		Generation second = first.evolve();
+		assertEquals(4, second.countAlive());
+	}
 
 }
