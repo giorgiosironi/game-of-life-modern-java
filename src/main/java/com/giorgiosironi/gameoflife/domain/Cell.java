@@ -35,6 +35,7 @@ public final class Cell {
 	}
 
 	public Zone neighborhood() {
+		// TODO: we have knowledge of HashSet here but we should only know about it in Zone
 		Set<Cell> set = new HashSet<Cell>();
 		for (int x = this.x - 1; x <= this.x + 1; x++) {
 			for (int y = this.y - 1; y <= this.y + 1; y++) {
