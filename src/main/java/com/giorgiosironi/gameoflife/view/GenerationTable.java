@@ -17,8 +17,8 @@ public class GenerationTable {
 		this.plane = plane;
 	}
 	
-	public GenerationTable() {
-		this(10, 10, null);
+	public GenerationTable(Plane plane) {
+		this(10, 10, plane);
 	}
 
 	public String toString() {

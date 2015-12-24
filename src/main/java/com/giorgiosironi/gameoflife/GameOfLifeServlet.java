@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.giorgiosironi.gameoflife.domain.Cell;
+import com.giorgiosironi.gameoflife.domain.Generation;
 import com.giorgiosironi.gameoflife.view.GenerationTable;
 
 public class GameOfLifeServlet extends HttpServlet {
@@ -17,7 +19,7 @@ public class GameOfLifeServlet extends HttpServlet {
 		try {
 			PrintWriter out = response.getWriter();
 			out.println("<h1>Game Of Life</h1>");
-			out.println(new GenerationTable());
+			out.println(new GenerationTable(Generation.withAliveCells(Cell.onXAndY(1, 1), Cell.onXAndY(1, 2))));
 		} catch (IOException e) {
 			// TODO: logging
 			// TODO Auto-generated catch block
