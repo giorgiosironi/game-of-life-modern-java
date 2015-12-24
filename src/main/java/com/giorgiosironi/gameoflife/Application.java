@@ -19,7 +19,10 @@ public class Application implements Runnable {
 				started = false;
 				server = new Server(8080);
 				ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-				context.setContextPath("/");context.addServlet(GameOfLifeServlet.class, "/");
+				context.setContextPath("/");
+				context.addServlet(GameOfLifeServlet.class, "/");
+				// TODO: should serve also a CSS that can be linked to this page
+				// TODO: have a template for the page instead of printing <h1>
 				server.setHandler(context);
 				server.start();
 				started = true;	

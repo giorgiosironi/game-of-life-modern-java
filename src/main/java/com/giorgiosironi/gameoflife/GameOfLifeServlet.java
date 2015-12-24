@@ -19,6 +19,7 @@ public class GameOfLifeServlet extends HttpServlet {
 			out.println("<h1>Game Of Life</h1>");
 			out.println(new GenerationTable());
 		} catch (IOException e) {
+			// TODO: logging
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

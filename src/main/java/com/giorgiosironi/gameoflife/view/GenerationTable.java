@@ -6,6 +6,8 @@ public class GenerationTable {
 	private int columns;
 
 	public GenerationTable(int rows, int columns) {
+		// TODO: should take a Generation object containing the state of the generation
+		// Generation should be able to evolve
 		this.rows = rows;
 		this.columns = columns;
 	}
