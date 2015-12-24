@@ -17,6 +17,10 @@ public final class Zone implements Iterable<Cell> {
 	public static Zone fromSet(Set<Cell> set) {
 		return new Zone(set);
 	}
+
+	public static Zone empty() {
+		return new Zone(new HashSet<Cell>());
+	}
 	
 	public static Zone ofCells(Cell... contents) {
 		Set<Cell> set = new HashSet<Cell>();
@@ -46,4 +50,12 @@ public final class Zone implements Iterable<Cell> {
 		}
 		return new Zone(union);
 	}
+
+	public Zone remove(Cell target) {
+		// TODO: duplication of HashSet creation
+		Set<Cell> smaller = new HashSet<Cell>(this.set);
+		smaller.remove(target);
+		return new Zone(smaller);
+	}
+
 }

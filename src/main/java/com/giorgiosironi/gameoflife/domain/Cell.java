@@ -34,7 +34,7 @@ public final class Cell {
 			&& another.y == this.y;
 	}
 
-	public Zone neighborhood() {
+	public Zone block() {
 		// TODO: we have knowledge of HashSet here but we should only know about it in Zone
 		Set<Cell> set = new HashSet<Cell>();
 		for (int x = this.x - 1; x <= this.x + 1; x++) {
@@ -45,6 +45,10 @@ public final class Cell {
 		
 		return Zone.fromSet(set);
 	}
+	
+	public Zone neighbors() {
+		return block().remove(this);
+	}
 
 	public int distanceOnX(Cell center) {
 		return Math.abs(center.x - this.x);
@@ -53,5 +57,6 @@ public final class Cell {
 	public int distanceOny(Cell center) {
 		return Math.abs(center.y - this.y);
 	}
+
 
 }
