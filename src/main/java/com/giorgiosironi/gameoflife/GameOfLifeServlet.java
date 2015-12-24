@@ -19,6 +19,8 @@ public class GameOfLifeServlet extends HttpServlet {
 		try {
 			PrintWriter out = response.getWriter();
 			out.println("<h1>Game Of Life</h1>");
+			out.println("<style>td { border: 1px solid black; width: 30px; height: 30px; } </style>");
+
 			out.println(new GenerationTable(Generation.withAliveCells(Cell.onXAndY(1, 1), Cell.onXAndY(1, 2))));
 		} catch (IOException e) {
 			// TODO: logging
