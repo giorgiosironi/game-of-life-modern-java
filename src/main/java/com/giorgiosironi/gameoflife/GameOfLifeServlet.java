@@ -2,6 +2,8 @@ package com.giorgiosironi.gameoflife;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.Servlet;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +14,10 @@ import com.giorgiosironi.gameoflife.domain.Cell;
 import com.giorgiosironi.gameoflife.domain.Generation;
 import com.giorgiosironi.gameoflife.view.GenerationTable;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+
 public class GameOfLifeServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) {
 		response.setContentType("text/html; charset=utf-8");
@@ -19,6 +25,7 @@ public class GameOfLifeServlet extends HttpServlet {
 		try {
 			PrintWriter out = response.getWriter();
 			out.println("<h1>Game Of Life</h1>");
+			// TODO: serve a CSS file
 			out.println("<style>td { border: 1px solid black; width: 30px; height: 30px; } </style>");
 
 			Generation current = Generation.withAliveCells(
@@ -36,9 +43,18 @@ public class GameOfLifeServlet extends HttpServlet {
 				}
 			}
 			out.println(new GenerationTable(current));
+			Configuration cfg = new Configuration();
+			// TODO: template path, where it should be and how to refer to it?
+            Template template = cfg.getTemplate("src/main/java/hello.ftl");
+            // TODO: build a good data model out of Generation and GenerationTable class
+            Map<String, Object> data = new HashMap<String, Object>();
+            template.process(data, out);
 			
 		} catch (IOException e) {
 			// TODO: logging
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TemplateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
