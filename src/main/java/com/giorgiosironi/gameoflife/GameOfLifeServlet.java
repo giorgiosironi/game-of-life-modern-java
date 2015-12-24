@@ -21,7 +21,22 @@ public class GameOfLifeServlet extends HttpServlet {
 			out.println("<h1>Game Of Life</h1>");
 			out.println("<style>td { border: 1px solid black; width: 30px; height: 30px; } </style>");
 
-			out.println(new GenerationTable(Generation.withAliveCells(Cell.onXAndY(1, 1), Cell.onXAndY(1, 2))));
+			Generation current = Generation.withAliveCells(
+				Cell.onXAndY(1, 1),
+				Cell.onXAndY(1, 2),
+				Cell.onXAndY(2, 1),
+				Cell.onXAndY(2, 2),
+				Cell.onXAndY(7, 8)
+			);
+			
+			String requestedGeneration = request.getParameter("generation");
+			if (requestedGeneration != null) {
+				for (int i = 1; i <= Integer.parseInt(requestedGeneration); i++) {
+					current = current.evolve();
+				}
+			}
+			out.println(new GenerationTable(current));
+			
 		} catch (IOException e) {
 			// TODO: logging
 			// TODO Auto-generated catch block
