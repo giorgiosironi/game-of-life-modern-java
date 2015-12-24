@@ -4,12 +4,23 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.giorgiosironi.gameoflife.domain.Plane.State;
+
 public class GenerationTest {
 
+	// TODO: isAlive() may become private?
 	@Test
 	public void modelsTheAliveCells() {
 		Generation g = Generation.withAliveCells(Cell.onXAndY(0, 0));
 		assertTrue(g.isAlive(Cell.onXAndY(0, 0)));
+		assertFalse(g.isAlive(Cell.onXAndY(0, 1)));
+	}
+	
+	@Test 
+	public void conformsToThePlaneInterfaceForViews()
+	{
+		Generation g = Generation.withAliveCells(Cell.onXAndY(0, 0));
+		assertEquals(State.ALIVE, g.state(0, 0));
 		assertFalse(g.isAlive(Cell.onXAndY(0, 1)));
 	}
 	

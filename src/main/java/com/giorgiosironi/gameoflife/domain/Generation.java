@@ -3,7 +3,7 @@ package com.giorgiosironi.gameoflife.domain;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class Generation {
+public final class Generation implements Plane {
 
 	// TODO: rename to aliveCells?
 	private Set<Cell> set;
@@ -22,6 +22,10 @@ public final class Generation {
 			set.add(cells[i]);
 		}
 		return new Generation(set);
+	}
+	
+	public State state(int x, int y) {
+		return isAlive(Cell.onXAndY(x, y)) ? State.ALIVE : State.DEAD;
 	}
 
 	public boolean isAlive(Cell candidate) {

@@ -1,7 +1,7 @@
 package com.giorgiosironi.gameoflife.view;
 
-import com.giorgiosironi.gameoflife.model.Plane;
-import com.giorgiosironi.gameoflife.model.Plane.State;
+import com.giorgiosironi.gameoflife.domain.Plane;
+import com.giorgiosironi.gameoflife.domain.Plane.State;
 
 public class GenerationTable {
 

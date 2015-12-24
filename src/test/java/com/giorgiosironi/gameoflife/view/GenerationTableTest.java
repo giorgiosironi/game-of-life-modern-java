@@ -5,8 +5,8 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 
-import com.giorgiosironi.gameoflife.model.Plane;
-import com.giorgiosironi.gameoflife.model.Plane.State;
+import com.giorgiosironi.gameoflife.domain.Plane;
+import com.giorgiosironi.gameoflife.domain.Plane.State;
 
 public class GenerationTableTest {
 
