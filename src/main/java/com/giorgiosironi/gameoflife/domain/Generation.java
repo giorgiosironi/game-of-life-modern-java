@@ -11,6 +11,10 @@ public final class Generation {
 		this.set = set;
 	}
 
+	public Generation() {
+		this.set = new HashSet<Cell>();
+	}
+
 	public static Generation withAliveCells(Cell theOnlyAliveOne) {
 		Set<Cell> set = new HashSet<Cell>();
 		set.add(theOnlyAliveOne);
@@ -19,6 +23,14 @@ public final class Generation {
 
 	public boolean isAlive(Cell candidate) {
 		return set.contains(candidate);
+	}
+
+	public Generation evolve() {
+		return new Generation();
+	}
+
+	public int countAlive() {
+		return set.size();
 	}
 
 }
