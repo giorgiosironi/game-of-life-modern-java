@@ -24,15 +24,6 @@ public class GenerationTest {
 		assertFalse(g.isAlive(Cell.onXAndY(0, 1)));
 	}
 	
-	// TODO: move to ClassicRulesTest
-	@Test
-	public void evolvesFollowingTheFirstRuleKillingSolitaryCells()
-	{
-		Generation first = Generation.withAliveCells(Cell.onXAndY(0, 0));
-		Generation second = first.evolve();
-		assertEquals(0, second.countAlive());
-	}
-	
 	@Test
 	public void a2By2BlockWillRemainFixedForEternity()
 	{
