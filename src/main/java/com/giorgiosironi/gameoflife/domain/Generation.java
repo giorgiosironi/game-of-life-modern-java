@@ -6,11 +6,11 @@ import java.util.Set;
 public final class Generation implements Plane {
 
 	// TODO: rename to aliveCells?
-	private Set<Cell> set;
+	private Set<Cell> aliveCells;
 	private ClassicRules rules;
 
 	private Generation(Set<Cell> set) {
-		this.set = set;
+		this.aliveCells = set;
 		this.rules = new ClassicRules();
 	}
 
@@ -35,17 +35,17 @@ public final class Generation implements Plane {
 	}
 
 	private boolean isAlive(Cell candidate) {
-		return set.contains(candidate);
+		return aliveCells.contains(candidate);
 	}
 
 	public Generation evolve() {
 		Zone toCalculate = Zone.empty();
-		for (Cell alive : set) {
+		for (Cell alive : aliveCells) {
 			toCalculate = toCalculate.union(alive.block());
 		}
 		Set<Cell> newGeneration = new HashSet<Cell>();
 		// TODO: try Zone.map with Java 8 closures?
-		// TODO: Zone.countAlive(AliveRegister register);
+		// TODO: Zone.count(isAliveCallback);
 		for (Cell candidate : toCalculate) {
 			int aliveNeighbors = 0;
 			for (Cell neighbor : candidate.neighbors()) {
@@ -62,7 +62,7 @@ public final class Generation implements Plane {
 	}
 
 	public int countAlive() {
-		return set.size();
+		return aliveCells.size();
 	}
 
 }
