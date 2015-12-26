@@ -1,7 +1,7 @@
 package com.giorgiosironi.gameoflife.domain;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class Cell {
 
@@ -34,15 +34,14 @@ public final class Cell {
 	}
 
 	public Zone block() {
-		// TODO: we have knowledge of HashSet here but we should only know about it in Zone
-		Set<Cell> set = new HashSet<Cell>();
+		List<Cell> set = new ArrayList<Cell>();
 		for (int x = this.x - 1; x <= this.x + 1; x++) {
 			for (int y = this.y - 1; y <= this.y + 1; y++) {
 				set.add(Cell.onXAndY(x, y));
 			}
 		}
 		
-		return Zone.fromSet(set);
+		return Zone.fromCollection(set);
 	}
 	
 	public Zone neighbors() {

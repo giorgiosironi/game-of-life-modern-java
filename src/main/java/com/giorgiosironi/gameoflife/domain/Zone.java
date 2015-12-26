@@ -1,5 +1,6 @@
 package com.giorgiosironi.gameoflife.domain;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -13,9 +14,9 @@ public final class Zone implements Iterable<Cell> {
 	public Zone(Set<Cell> set) {
 		this.set = set;
 	}
-
-	public static Zone fromSet(Set<Cell> set) {
-		return new Zone(set);
+	
+	public static Zone fromCollection(Collection<Cell> collection) {
+		return new Zone(new HashSet<Cell>(collection));
 	}
 
 	public static Zone empty() {
