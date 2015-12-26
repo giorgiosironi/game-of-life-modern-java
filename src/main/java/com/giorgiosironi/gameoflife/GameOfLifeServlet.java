@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.giorgiosironi.gameoflife.domain.Cell;
 import com.giorgiosironi.gameoflife.domain.Generation;
-import com.giorgiosironi.gameoflife.view.GenerationTable;
+import com.giorgiosironi.gameoflife.view.GenerationWindow;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -43,7 +43,7 @@ public class GameOfLifeServlet extends HttpServlet {
 					current = current.evolve();
 				}
 			}
-			GenerationTable generationTable = new GenerationTable(current);
+			GenerationWindow generationTable = new GenerationWindow(current);
 			Configuration cfg = new Configuration();
 			// TODO: template path, where it should be and how to refer to it?
             Template template = cfg.getTemplate("src/main/java/generation.ftl");
