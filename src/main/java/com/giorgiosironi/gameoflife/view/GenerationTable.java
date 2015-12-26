@@ -20,19 +20,19 @@ public class GenerationTable {
 	public GenerationTable(Plane plane) {
 		this(10, 10, plane);
 	}
-
-	public String toString() {
-		String representation = "<table>";
-		for (int x = 0; x < rows; x++) {
-			representation += "<tr>";
-			for (int y = 0; y < columns; y++) {
-				String content = this.plane.state(x, y) == State.ALIVE ? "X" : "";
-				representation += "<td>" + content + "</td>";
-			}
-			representation += "</tr>";
-		}
-		representation += "</table>";
-		return representation;
+	
+	public State state(int x, int y) {
+		return plane.state(x, y);
+	}
+	
+	public int getRows()
+	{
+		return this.rows;
+	}
+	
+	public int getColumns()
+	{
+		return this.columns;
 	}
 
 }

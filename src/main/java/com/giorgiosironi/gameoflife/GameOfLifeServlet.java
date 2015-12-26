@@ -25,14 +25,11 @@ public class GameOfLifeServlet extends HttpServlet {
 		response.setStatus(HttpServletResponse.SC_OK);
 		try {
 			PrintWriter out = response.getWriter();
-			out.println("<h1>Game Of Life</h1>");
-			// TODO: serve a CSS file
-			out.println("<style>td { border: 1px solid black; width: 30px; height: 30px; } </style>");
 
 			Generation current = Generation.withAliveCells(
 				Cell.onXAndY(1, 1),
 				Cell.onXAndY(1, 2),
-				Cell.onXAndY(1, 1),
+				Cell.onXAndY(2, 1),
 				Cell.onXAndY(2, 2),
 				Cell.onXAndY(7, 1),
 				Cell.onXAndY(7, 2),
@@ -46,12 +43,13 @@ public class GameOfLifeServlet extends HttpServlet {
 					current = current.evolve();
 				}
 			}
-			out.println(new GenerationTable(current));
+			GenerationTable generationTable = new GenerationTable(current);
 			Configuration cfg = new Configuration();
 			// TODO: template path, where it should be and how to refer to it?
-            Template template = cfg.getTemplate("src/main/java/hello.ftl");
+            Template template = cfg.getTemplate("src/main/java/generation.ftl");
             // TODO: build a good data model out of Generation and GenerationTable class
             Map<String, Object> data = new HashMap<String, Object>();
+            data.put("generation", generationTable);
             template.process(data, out);
 			
 		} catch (IOException e) {
