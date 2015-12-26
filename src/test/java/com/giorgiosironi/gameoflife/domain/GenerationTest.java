@@ -24,6 +24,7 @@ public class GenerationTest {
 		assertFalse(g.isAlive(Cell.onXAndY(0, 1)));
 	}
 	
+	// TODO: move to ClassicRulesTest
 	@Test
 	public void evolvesFollowingTheFirstRuleKillingSolitaryCells()
 	{

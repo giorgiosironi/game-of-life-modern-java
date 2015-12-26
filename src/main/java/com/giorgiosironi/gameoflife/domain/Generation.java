@@ -7,13 +7,15 @@ public final class Generation implements Plane {
 
 	// TODO: rename to aliveCells?
 	private Set<Cell> set;
+	private ClassicRules rules;
 
 	public Generation(Set<Cell> set) {
 		this.set = set;
+		this.rules = new ClassicRules();
 	}
 
 	public Generation() {
-		this.set = new HashSet<Cell>();
+		this(new HashSet<Cell>());
 	}
 
 	public static Generation withAliveCells(Cell... cells) {
@@ -47,7 +49,8 @@ public final class Generation implements Plane {
 					aliveNeighbors++;
 				}
 			}
-			if (isAlive(candidate) && aliveNeighbors >= 2) {
+			State candidateStateInNewGeneration = rules.nextState(isAlive(candidate) ? State.ALIVE : State.DEAD, aliveNeighbors);
+			if (candidateStateInNewGeneration == State.ALIVE) {
 				newGeneration.add(candidate);
 			}
 		}
