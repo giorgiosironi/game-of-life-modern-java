@@ -8,7 +8,7 @@ public final class Cell {
 	private int x;
 	private int y;
 
-	public Cell(int x, int y) {
+	private Cell(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -17,8 +17,7 @@ public final class Cell {
 		return new Cell(x, y);
 	}
 	
-	public int hashCode()
-	{
+	public int hashCode() {
 		return 0;
 	}
 	

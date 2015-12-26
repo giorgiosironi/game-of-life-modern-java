@@ -10,8 +10,7 @@ public final class Zone implements Iterable<Cell> {
 	private Set<Cell> set;
 
 	// TODO: keyboard shortcuts of Eclipse for quick fixes
-	// TODO: make constructors private
-	public Zone(Set<Cell> set) {
+	private Zone(Set<Cell> set) {
 		this.set = set;
 	}
 	

@@ -9,12 +9,12 @@ public final class Generation implements Plane {
 	private Set<Cell> set;
 	private ClassicRules rules;
 
-	public Generation(Set<Cell> set) {
+	private Generation(Set<Cell> set) {
 		this.set = set;
 		this.rules = new ClassicRules();
 	}
 
-	public Generation() {
+	private Generation() {
 		this(new HashSet<Cell>());
 	}
 
