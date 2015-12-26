@@ -36,7 +36,7 @@ public class BrowserAcceptanceTest {
 
 	@Test
 	public void testLoadsTheFirstGenerationInTheBrowser() throws InterruptedException {
-		driver.get("http://localhost:8080");
+		driver.get("http://localhost:8080/plane");
 		WebElement title = driver.findElement(By.cssSelector("h1"));
 		assertEquals("Game Of Life", title.getText());
 		WebElement generation = driver.findElement(By.cssSelector("table"));

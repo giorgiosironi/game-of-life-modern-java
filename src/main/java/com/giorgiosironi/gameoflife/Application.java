@@ -1,6 +1,9 @@
 package com.giorgiosironi.gameoflife;
 
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
@@ -19,18 +22,22 @@ public class Application implements Runnable {
 			synchronized (startedNotification) {
 				started = false;
 				server = new Server(8080);
+				
 				ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 				context.setContextPath("/");
-				// TODO: change path
-				context.setResourceBase("src/main/java");
-				// TODO: security problem, should be a subfolder
-				context.addServlet(DefaultServlet.class, "/");
 				context.addServlet(GameOfLifeServlet.class, "/plane");
-
-				// TODO: should serve also a CSS that can be linked to this page
-				// TODO: have a template for the page instead of printing <h1>
-				server.setHandler(context);
-				server.start();
+				
+			    ResourceHandler resource_handler = new ResourceHandler();
+			    resource_handler.setDirectoriesListed(true);
+			    // how to point to a dynamic page?
+			    resource_handler.setWelcomeFiles(new String[]{ "index.html" });
+				// TODO: security problem, should be a subfolder			 
+			    resource_handler.setResourceBase("src/main/java");
+			    
+			    HandlerList handlers = new HandlerList();
+				handlers.setHandlers(new Handler[] { resource_handler, context });
+			    server.setHandler(handlers);
+			 	server.start();
 				started = true;	
 				startedNotification.notify();
 			}
