@@ -14,19 +14,28 @@ public final class Zone implements Iterable<Cell> {
 	}
 	
 	public static Zone fromCollection(Collection<Cell> collection) {
-		return new Zone(new HashSet<Cell>(collection));
+		return new Zone(populatedSet(collection));
 	}
 
 	public static Zone empty() {
-		return new Zone(new HashSet<Cell>());
+		return new Zone(emptySet());
 	}
-	
+		
 	public static Zone ofCells(Cell... contents) {
-		Set<Cell> set = new HashSet<Cell>();
+		Set<Cell> set = emptySet();
 		for (int i = 0; i < contents.length; i++) {
 			set.add(contents[i]);
 		}
 		return new Zone(set);
+	}
+
+	private static Set<Cell> emptySet() {
+		Set<Cell> set = new HashSet<Cell>();
+		return set;
+	}
+	
+	private static Set<Cell> populatedSet(Collection<Cell> collection) {
+		return new HashSet<Cell>(collection);
 	}
 
 	public int size() {
@@ -43,7 +52,7 @@ public final class Zone implements Iterable<Cell> {
 	}
 
 	public Zone union(Zone intersecting) {
-		Set<Cell> union = new HashSet<Cell>(this.set);
+		Set<Cell> union = populatedSet(this.set);
 		for (Cell each: intersecting) {
 			union.add(each);
 		}
@@ -51,8 +60,7 @@ public final class Zone implements Iterable<Cell> {
 	}
 
 	public Zone remove(Cell target) {
-		// TODO: duplication of HashSet creation
-		Set<Cell> smaller = new HashSet<Cell>(this.set);
+		Set<Cell> smaller = populatedSet(this.set);
 		smaller.remove(target);
 		return new Zone(smaller);
 	}
