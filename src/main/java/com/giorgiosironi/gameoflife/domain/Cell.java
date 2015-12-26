@@ -3,7 +3,6 @@ package com.giorgiosironi.gameoflife.domain;
 import java.util.HashSet;
 import java.util.Set;
 
-// TODO: Position may be a better name
 public final class Cell {
 
 	private int x;
