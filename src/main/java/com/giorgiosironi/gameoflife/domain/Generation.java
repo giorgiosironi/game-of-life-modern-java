@@ -27,10 +27,14 @@ public final class Generation implements Plane {
 	}
 	
 	public State state(int x, int y) {
-		return isAlive(Cell.onXAndY(x, y)) ? State.ALIVE : State.DEAD;
+		return state(Cell.onXAndY(x, y));
+	}
+	
+	private State state(Cell cell) {
+		return isAlive(cell) ? State.ALIVE : State.DEAD;
 	}
 
-	public boolean isAlive(Cell candidate) {
+	private boolean isAlive(Cell candidate) {
 		return set.contains(candidate);
 	}
 
@@ -49,7 +53,7 @@ public final class Generation implements Plane {
 					aliveNeighbors++;
 				}
 			}
-			State candidateStateInNewGeneration = rules.nextState(isAlive(candidate) ? State.ALIVE : State.DEAD, aliveNeighbors);
+			State candidateStateInNewGeneration = rules.nextState(state(candidate), aliveNeighbors);
 			if (candidateStateInNewGeneration == State.ALIVE) {
 				newGeneration.add(candidate);
 			}
