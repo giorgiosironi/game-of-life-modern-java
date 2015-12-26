@@ -1,6 +1,7 @@
 package com.giorgiosironi.gameoflife;
 
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
 public class Application implements Runnable {
@@ -20,7 +21,12 @@ public class Application implements Runnable {
 				server = new Server(8080);
 				ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 				context.setContextPath("/");
-				context.addServlet(GameOfLifeServlet.class, "/");
+				// TODO: change path
+				context.setResourceBase("src/main/java");
+				// TODO: security problem, should be a subfolder
+				context.addServlet(DefaultServlet.class, "/");
+				context.addServlet(GameOfLifeServlet.class, "/plane");
+
 				// TODO: should serve also a CSS that can be linked to this page
 				// TODO: have a template for the page instead of printing <h1>
 				server.setHandler(context);

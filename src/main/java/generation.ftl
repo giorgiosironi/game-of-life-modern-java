@@ -1,12 +1,6 @@
-<h1>Game Of Life</h1>
+<link rel="StyleSheet" href="/style.css" media="screen" />
 
-<#-- TODO: extract style.css -->
-<style type="text/css">
-td { border: 1px solid black; width: 30px; height: 30px; }
-td.state_alive {
-	background-color: black;
-}
-</style>
+<h1>Game Of Life</h1>
 <table>
 
 <#list 0..(generation.rows-1) as x>
