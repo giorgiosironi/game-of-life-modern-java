@@ -32,8 +32,11 @@ public class GameOfLifeServlet extends HttpServlet {
 			Generation current = Generation.withAliveCells(
 				Cell.onXAndY(1, 1),
 				Cell.onXAndY(1, 2),
-				Cell.onXAndY(2, 1),
+				Cell.onXAndY(1, 1),
 				Cell.onXAndY(2, 2),
+				Cell.onXAndY(7, 1),
+				Cell.onXAndY(7, 2),
+				Cell.onXAndY(7, 3),
 				Cell.onXAndY(7, 8)
 			);
 			
