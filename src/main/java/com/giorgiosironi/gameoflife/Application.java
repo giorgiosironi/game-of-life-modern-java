@@ -4,7 +4,6 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
 public class Application implements Runnable {
@@ -30,9 +29,8 @@ public class Application implements Runnable {
 			    ResourceHandler resource_handler = new ResourceHandler();
 			    resource_handler.setDirectoriesListed(true);
 			    // how to point to a dynamic page?
-			    resource_handler.setWelcomeFiles(new String[]{ "index.html" });
-				// TODO: security problem, should be a subfolder			 
-			    resource_handler.setResourceBase("src/main/resources/static");
+			    resource_handler.setWelcomeFiles(new String[]{ "index.html" });	
+			    resource_handler.setResourceBase(this.getClass().getResource("/static").toString());
 			    
 			    HandlerList handlers = new HandlerList();
 				handlers.setHandlers(new Handler[] { resource_handler, context });
