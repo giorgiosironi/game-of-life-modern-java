@@ -12,6 +12,11 @@
 </#list>
 </table>
 
-	<a href="/plane?generation=${generation_index - 1}" rel="prev">Previous generation</a>
-
-<a href="/plane?generation=${generation_index + 1}" rel="next">Next generation</a>
+<div class="navigation">
+	<div class="generation_link">
+		<a href="/plane?generation=${generation_index - 1}" rel="prev">Previous generation</a>
+	</div>
+	<div class="generation_link">
+		<a href="/plane?generation=${generation_index + 1}" rel="next">Next generation</a>
+	</div>
+</div>

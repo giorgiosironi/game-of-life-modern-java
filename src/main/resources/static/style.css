@@ -1,4 +1,26 @@
-td { border: 1px solid black; width: 30px; height: 30px; }
+body {
+	text-align: center;
+}
+table {
+	width: 100%;
+	max-width: 500px;
+	height: 500px;
+	margin: auto;
+}
+td {
+	border: 1px solid black; 
+	width: 10%;
+	height: 10%;
+}
 td.state_alive {
 	background-color: black;
+}
+div.navigation {
+	margin: 1em auto;
+	width: 500px;
+}
+div.navigation div.generation_link {
+	float: left;
+	width: 50%;
+	height: 2em;
 }
