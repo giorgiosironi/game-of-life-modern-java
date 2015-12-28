@@ -9,6 +9,9 @@
 
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "com.giorgiosironi.gameoflife.Application"
 
 version = '0.0.1'
 jar {
