@@ -24,6 +24,7 @@ public class BrowserAcceptanceTest {
 		driver = new FirefoxDriver();
 		application = new Application();
 		applicationThread = new Thread(application);
+		applicationThread.setName("ApplicationTest");
 		applicationThread.start();
 		application.waitForStartup();
 	}

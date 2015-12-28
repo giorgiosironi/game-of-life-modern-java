@@ -5,6 +5,8 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Application implements Runnable {
 
@@ -12,12 +14,16 @@ public class Application implements Runnable {
 	private boolean started;
 	private Object startedNotification;
 	private static final int PORT = 8080;
+	private Logger logger;
 	
 	public Application() {
 		startedNotification = new Object();
+		logger = LoggerFactory.getLogger(this.getClass());
 	}
 
 	public void run() {	
+		logger.info("Starting up");
+
 		synchronized (startedNotification) {
 			started = false;
 			server = new Server(PORT);
@@ -38,11 +44,11 @@ public class Application implements Runnable {
 		 	try {
 				server.start();
 			} catch (Exception e) {
+				logger.error("Jetty could not start", e);
 				try {
-					// TODO: log exception somewhere
-					System.out.println("Shutting down immediately");
+					logger.info("Shutting down immediately");
 					server.stop();
-					System.out.println("Jetty stopped");
+					logger.info("Jetty is now stopped");
 					return;
 				} catch (Exception e1) {
 					throw new RuntimeException("Cannot shutdown Jetty", e1);
@@ -51,14 +57,12 @@ public class Application implements Runnable {
 			started = true;	
 			startedNotification.notify();
 		}
-			//server.dumpStdErr();
 		try {
 			server.join();
 		} catch (InterruptedException e) {
-			// TODO: log this somewhere
-			System.out.println("Application interrupted");
-		}
-		
+			logger.info("Interrupted", e);
+		}		
+		logger.info("Shutting down cleanly");
 	}
 	
 	public void waitForStartup() throws InterruptedException {
@@ -73,8 +77,7 @@ public class Application implements Runnable {
 		try {
 			server.stop();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Cannot stop Jetty", e);
 		}
 	}
 	
