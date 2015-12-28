@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.giorgiosironi.gameoflife.domain.Cell;
 import com.giorgiosironi.gameoflife.domain.Generation;
 import com.giorgiosironi.gameoflife.view.GenerationWindow;
@@ -19,6 +22,7 @@ import freemarker.template.TemplateException;
 
 public class GameOfLifeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private Logger logger = LoggerFactory.getLogger(GameOfLifeServlet.class);
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) {
 		response.setContentType("text/html; charset=utf-8");
@@ -43,24 +47,19 @@ public class GameOfLifeServlet extends HttpServlet {
 					current = current.evolve();
 				}
 			}
-			GenerationWindow generationTable = new GenerationWindow(current);
-			Configuration cfg = new Configuration();
-			// TODO: template path, where it should be and how to refer to it?
+			GenerationWindow generationWindow = new GenerationWindow(current);
+			Configuration cfg = new Configuration(Configuration.VERSION_2_3_23);
 			cfg.setClassForTemplateLoading(this.getClass(), "/templates");
 			Template template = cfg.getTemplate("generation.ftl");
             
-            // TODO: build a good data model out of Generation and GenerationTable class
             Map<String, Object> data = new HashMap<String, Object>();
-            data.put("generation", generationTable);
+            data.put("generation", generationWindow);
             template.process(data, out);
 			
 		} catch (IOException e) {
-			// TODO: logging
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Template not found", e);
 		} catch (TemplateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Template population problem", e);
 		}
 	}
 }
