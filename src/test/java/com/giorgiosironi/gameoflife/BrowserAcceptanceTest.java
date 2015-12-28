@@ -1,6 +1,7 @@
 package com.giorgiosironi.gameoflife;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -36,13 +37,19 @@ public class BrowserAcceptanceTest {
 	}
 
 	@Test
-	public void testLoadsTheFirstGenerationInTheBrowser() throws InterruptedException {
+	public void testLoadsTheFirstGenerationInTheBrowserAndCanMakeItEvolve() throws InterruptedException {
 		driver.get("http://localhost:8080/plane");
 		WebElement title = driver.findElement(By.cssSelector("h1"));
 		assertEquals("Game Of Life", title.getText());
 		WebElement generation = driver.findElement(By.cssSelector("table"));
 		List<WebElement> cells = generation.findElements(By.cssSelector("td"));
-		assertEquals(100, cells.size());
+		assertEquals("Should show a 10x10 window over the infinite plane", 100, cells.size());
+		WebElement next = driver.findElement(By.cssSelector("a[rel~=next]"));
+		next.click();
+		assertTrue("Should show the second generation", driver.getCurrentUrl().endsWith("plane?generation=1"));
+		WebElement previous = driver.findElement(By.cssSelector("a[rel~=prev]"));
+		previous.click();
+		assertTrue("Should show again the first generation", driver.getCurrentUrl().endsWith("plane?generation=0"));
 	}
 
 }

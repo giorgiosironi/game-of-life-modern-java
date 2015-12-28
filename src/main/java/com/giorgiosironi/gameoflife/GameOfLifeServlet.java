@@ -41,12 +41,17 @@ public class GameOfLifeServlet extends HttpServlet {
 				Cell.onXAndY(7, 8)
 			);
 			
-			String requestedGeneration = request.getParameter("generation");
-			if (requestedGeneration != null) {
-				for (int i = 1; i <= Integer.parseInt(requestedGeneration); i++) {
+			String requestedGenerationParameter = request.getParameter("generation");
+			int requestedGeneration;
+			if (requestedGenerationParameter != null) {
+				requestedGeneration = Integer.parseInt(requestedGenerationParameter);
+				for (int i = 1; i <= requestedGeneration; i++) {
 					current = current.evolve();
 				}
+			} else {
+				requestedGeneration = 0;
 			}
+			
 			GenerationWindow generationWindow = new GenerationWindow(current);
 			Configuration cfg = new Configuration(Configuration.VERSION_2_3_23);
 			cfg.setClassForTemplateLoading(this.getClass(), "/templates");
@@ -54,6 +59,7 @@ public class GameOfLifeServlet extends HttpServlet {
             
             Map<String, Object> data = new HashMap<String, Object>();
             data.put("generation", generationWindow);
+            data.put("generation_index", requestedGeneration);
             template.process(data, out);
 			
 		} catch (IOException e) {
