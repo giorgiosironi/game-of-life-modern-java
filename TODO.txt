@@ -1,4 +1,3 @@
-- upgrade to Java 8
 - install static analysis tools
 - Clojure test.check tests on the model, both unit and acceptance
 - multiple instances of the plane, making persistence into any database necessary
