@@ -54,6 +54,11 @@ public final class Cell {
 	public int distanceOny(Cell center) {
 		return Math.abs(center.y - this.y);
 	}
+	
+	public String toString()
+	{
+		return "Cell(" + this.x + "," + this.y + ")";
+	}
 
 
 }
