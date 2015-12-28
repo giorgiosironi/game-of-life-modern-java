@@ -32,7 +32,7 @@ public class Application implements Runnable {
 			    // how to point to a dynamic page?
 			    resource_handler.setWelcomeFiles(new String[]{ "index.html" });
 				// TODO: security problem, should be a subfolder			 
-			    resource_handler.setResourceBase("src/main/java");
+			    resource_handler.setResourceBase("src/main/resources/static");
 			    
 			    HandlerList handlers = new HandlerList();
 				handlers.setHandlers(new Handler[] { resource_handler, context });

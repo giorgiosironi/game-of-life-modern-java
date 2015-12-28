@@ -46,7 +46,7 @@ public class GameOfLifeServlet extends HttpServlet {
 			GenerationWindow generationTable = new GenerationWindow(current);
 			Configuration cfg = new Configuration();
 			// TODO: template path, where it should be and how to refer to it?
-            Template template = cfg.getTemplate("src/main/java/generation.ftl");
+            Template template = cfg.getTemplate("src/main/resources/templates/generation.ftl");
             // TODO: build a good data model out of Generation and GenerationTable class
             Map<String, Object> data = new HashMap<String, Object>();
             data.put("generation", generationTable);
