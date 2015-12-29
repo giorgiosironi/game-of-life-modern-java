@@ -1,3 +1,2 @@
-- Clojure test.check tests on the model, both unit and acceptance
 - multiple instances of the plane, making persistence into any database necessary
 - performance optimization along with tests of these data structures
