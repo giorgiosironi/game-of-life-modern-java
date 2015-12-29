@@ -39,12 +39,8 @@ public final class Generation implements Plane {
 	}
 
 	public Generation evolve() {
-		Zone toCalculate = Zone.empty();
-		for (Cell alive : aliveCells) {
-			toCalculate = toCalculate.union(alive.block());
-		}
 		Set<Cell> newGeneration = new HashSet<Cell>();
-		toCalculate.forEach((Cell candidate) -> {
+		allCandidateToBeAliveInTheNextGeneration().forEach((Cell candidate) -> {
 			int aliveNeighbors = candidate.neighbors().count((Cell c) -> isAlive(c));
 			State candidateStateInNewGeneration = rules.nextState(state(candidate), aliveNeighbors);
 			if (candidateStateInNewGeneration == State.ALIVE) {
@@ -52,6 +48,17 @@ public final class Generation implements Plane {
 			}
 		}); 
 		return new Generation(newGeneration);
+	}
+
+	private Zone allCandidateToBeAliveInTheNextGeneration() {
+		Zone toCalculate = aliveCells
+			.stream()
+			.map((Cell alive) -> alive.block())
+			.reduce(
+				Zone.empty(), 
+				(Zone z1, Zone z2) -> z1.union(z2)
+			);
+		return toCalculate;
 	}
 
 	public int countAlive() {
