@@ -8,6 +8,9 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
+
 public class Application implements Runnable {
 
 	private Server server;
@@ -78,6 +81,7 @@ public class Application implements Runnable {
 	}
 	
 	public void stop() {
+		logger.info("Received request to stop");
 		try {
 			server.stop();
 		} catch (Exception e) {
@@ -90,6 +94,13 @@ public class Application implements Runnable {
 	}
 	
 	public static void main(String args[]) {
-		new Application().run();
+		
+		Application application = new Application();
+		Signal.handle(new Signal("INT"), new SignalHandler () {
+		    public void handle(Signal sig) {
+		        application.stop();
+		    }
+		});
+		application.run();
 	}
 }
