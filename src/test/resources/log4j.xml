@@ -5,20 +5,15 @@
   <appender name="console" class="org.apache.log4j.ConsoleAppender"> 
     <param name="Target" value="System.out"/> 
     <layout class="org.apache.log4j.PatternLayout"> 
-      <param name="ConversionPattern" value="%-5p  %d{HH:mm:ss,SSS} [%t] %c{1} - %m%n"/> 
-    </layout> 
-  </appender>
-  <appender name="file" class="org.apache.log4j.FileAppender"> 
-    <param name="file" value="/tmp/game-of-life.log"/> 
-    <layout class="org.apache.log4j.PatternLayout"> 
       <param name="ConversionPattern" value="%-5p %d{HH:mm:ss,SSS} [%t] %c{1} - %m%n"/> 
     </layout> 
-  </appender>  
+  </appender>
+  <appender name="null" class="org.apache.log4j.varia.NullAppender">  
+  </appender>
 
   <root> 
     <priority value="info" /> 
-    <appender-ref ref="console" />
-    <appender-ref ref="file" /> 
+    <appender-ref ref="null" />
   </root>
   
 </log4j:configuration>
