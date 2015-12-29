@@ -11,21 +11,22 @@ import org.slf4j.LoggerFactory;
 public class Application implements Runnable {
 
 	private Server server;
-	private boolean started;
-	private Object startedNotification;
+	private boolean startupFinished;
+	private Object startupNotification;
 	private static final int PORT = 8080;
 	private Logger logger;
+	private boolean running = false;
 	
 	public Application() {
-		startedNotification = new Object();
+		startupNotification = new Object();
 		logger = LoggerFactory.getLogger(this.getClass());
 	}
 
 	public void run() {	
 		logger.info("Starting up");
 
-		synchronized (startedNotification) {
-			started = false;
+		synchronized (startupNotification) {
+			startupFinished = false;
 			server = new Server(PORT);
 
 			ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -48,13 +49,16 @@ public class Application implements Runnable {
 					logger.info("Shutting down immediately");
 					server.stop();
 					logger.info("Jetty is now stopped");
+					startupFinished = true;
+					startupNotification.notify();
 					return;
 				} catch (Exception e1) {
 					throw new RuntimeException("Cannot shutdown Jetty", e1);
 				}
 			}
-			started = true;	
-			startedNotification.notify();
+		 	running = true;
+			startupFinished = true;	
+			startupNotification.notify();
 		}
 		try {
 			server.join();
@@ -62,12 +66,13 @@ public class Application implements Runnable {
 			logger.info("Interrupted", e);
 		}		
 		logger.info("Shutting down cleanly");
+		running = false;
 	}
 	
 	public void waitForStartup() throws InterruptedException {
-		synchronized (startedNotification) {
-			while (!started) {
-				this.startedNotification.wait();
+		synchronized (startupNotification) {
+			while (!startupFinished) {
+				this.startupNotification.wait();
 			}
 		}
 	}
@@ -78,6 +83,10 @@ public class Application implements Runnable {
 		} catch (Exception e) {
 			logger.error("Cannot stop Jetty", e);
 		}
+	}
+	
+	public boolean isRunning() {
+		return running;
 	}
 	
 	public static void main(String args[]) {
