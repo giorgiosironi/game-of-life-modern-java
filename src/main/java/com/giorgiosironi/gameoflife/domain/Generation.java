@@ -14,10 +14,6 @@ public final class Generation implements Plane {
 		this.rules = new ClassicRules();
 	}
 
-	private Generation() {
-		this(new HashSet<Cell>());
-	}
-
 	public static Generation withAliveCells(Cell... cells) {
 		Set<Cell> set = new HashSet<Cell>();
 		for (int i = 0; i < cells.length; i++) {
