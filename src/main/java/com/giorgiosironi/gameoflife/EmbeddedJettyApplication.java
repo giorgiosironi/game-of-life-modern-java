@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
 
-public class Application implements Runnable {
+public class EmbeddedJettyApplication implements Runnable {
 
 	private Server server;
 	private boolean startupFinished;
@@ -20,7 +20,7 @@ public class Application implements Runnable {
 	private Logger logger;
 	private boolean running = false;
 	
-	public Application() {
+	public EmbeddedJettyApplication() {
 		startupNotification = new Object();
 		logger = LoggerFactory.getLogger(this.getClass());
 	}
@@ -95,7 +95,7 @@ public class Application implements Runnable {
 	
 	public static void main(String args[]) {
 		
-		Application application = new Application();
+		EmbeddedJettyApplication application = new EmbeddedJettyApplication();
 		Signal.handle(new Signal("INT"), new SignalHandler () {
 		    public void handle(Signal sig) {
 		        application.stop();

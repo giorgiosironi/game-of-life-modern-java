@@ -17,13 +17,13 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 public class BrowserAcceptanceTest {
 
 	private WebDriver driver;
-	private Application application;
+	private EmbeddedJettyApplication application;
 	private Thread applicationThread;
 
 	@Before
 	public void setUp() throws Exception {
 		driver = new FirefoxDriver();
-		application = new Application();
+		application = new EmbeddedJettyApplication();
 		applicationThread = new Thread(application);
 		applicationThread.setName("ApplicationTest");
 		applicationThread.start();
