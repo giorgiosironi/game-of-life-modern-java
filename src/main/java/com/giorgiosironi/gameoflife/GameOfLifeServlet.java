@@ -22,9 +22,9 @@ import freemarker.template.TemplateException;
 
 public class GameOfLifeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private Logger logger = LoggerFactory.getLogger(GameOfLifeServlet.class);
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) {
+		Logger logger = LoggerFactory.getLogger(GameOfLifeServlet.class);
 		response.setContentType("text/html; charset=utf-8");
 		response.setStatus(HttpServletResponse.SC_OK);
 		try {

@@ -16,7 +16,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class BrowserAcceptanceTest {
 
-	private static WebDriver driver;
+	private WebDriver driver;
 	private Application application;
 	private Thread applicationThread;
 
