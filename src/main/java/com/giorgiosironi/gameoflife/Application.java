@@ -27,17 +27,16 @@ public class Application implements Runnable {
 		synchronized (startedNotification) {
 			started = false;
 			server = new Server(PORT);
-			
+
 			ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 			context.setContextPath("/");
 			context.addServlet(GameOfLifeServlet.class, "/plane");
-			
+
 		    ResourceHandler resource_handler = new ResourceHandler();
 		    resource_handler.setDirectoriesListed(true);
 		    // how to point to a dynamic page?
 		    resource_handler.setWelcomeFiles(new String[]{ "index.html" });	
 		    resource_handler.setResourceBase(this.getClass().getResource("/static").toString());
-		    
 		    HandlerList handlers = new HandlerList();
 			handlers.setHandlers(new Handler[] { resource_handler, context });
 		    server.setHandler(handlers);
