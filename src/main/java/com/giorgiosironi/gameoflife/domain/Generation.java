@@ -44,20 +44,13 @@ public final class Generation implements Plane {
 			toCalculate = toCalculate.union(alive.block());
 		}
 		Set<Cell> newGeneration = new HashSet<Cell>();
-		// TODO: try Zone.map with Java 8 closures?
-		// TODO: Zone.count(isAliveCallback);
-		for (Cell candidate : toCalculate) {
-			int aliveNeighbors = 0;
-			for (Cell neighbor : candidate.neighbors()) {
-				if (isAlive(neighbor)) {
-					aliveNeighbors++;
-				}
-			}
+		toCalculate.forEach((Cell candidate) -> {
+			int aliveNeighbors = candidate.neighbors().count((Cell c) -> isAlive(c));
 			State candidateStateInNewGeneration = rules.nextState(state(candidate), aliveNeighbors);
 			if (candidateStateInNewGeneration == State.ALIVE) {
 				newGeneration.add(candidate);
 			}
-		}
+		}); 
 		return new Generation(newGeneration);
 	}
 

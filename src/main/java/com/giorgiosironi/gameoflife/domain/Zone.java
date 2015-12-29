@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public final class Zone implements Iterable<Cell> {
 
@@ -63,6 +64,16 @@ public final class Zone implements Iterable<Cell> {
 		Set<Cell> smaller = populatedSet(this.set);
 		smaller.remove(target);
 		return new Zone(smaller);
+	}
+
+	public int count(Predicate<Cell> predicate) {
+		int total = 0;
+		for (Cell candidate : this.set) {
+			if (predicate.test(candidate)) {
+				total++;
+			}
+		}
+		return total;
 	}
 
 }
