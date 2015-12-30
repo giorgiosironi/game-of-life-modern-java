@@ -29,6 +29,8 @@ dependencies {
     compile 'org.glassfish.jersey.containers:jersey-container-grizzly2-http:2.22.1'
     compile 'org.glassfish.jersey.containers:jersey-container-jetty-http:2.22.1'
     compile 'org.glassfish.jersey.containers:jersey-container-servlet-core:2.22.1'
+    compile 'org.glassfish.jersey.ext:jersey-mvc:2.22.1'
+    compile 'org.glassfish.jersey.ext:jersey-mvc-freemarker:2.22.1'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.seleniumhq.selenium:selenium-server:2.48.2'

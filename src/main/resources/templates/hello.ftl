@@ -1,0 +1,1 @@
+Hello from Freemarker template served by Jersey
