@@ -5,8 +5,12 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.giorgiosironi.gameoflife.web.PingResource;
 
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
@@ -35,6 +39,19 @@ public class EmbeddedJettyApplication implements Runnable {
 			ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 			context.setContextPath("/");
 			context.addServlet(GameOfLifeServlet.class, "/plane");
+			
+			ServletContextHandler jerseyContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
+	        jerseyContext.setContextPath("/ping");
+	        ServletHolder jerseyServlet = context.addServlet(
+	               ServletContainer.class, "/*");
+	           jerseyServlet.setInitOrder(0);
+	    
+	           // Tells the Jersey Servlet which REST service/class to load./
+	           
+	           jerseyServlet.setInitParameter(
+	              "jersey.config.server.provider.classnames",
+	             PingResource.class.getCanonicalName());
+	             
 
 		    ResourceHandler resource_handler = new ResourceHandler();
 		    resource_handler.setDirectoriesListed(true);
@@ -42,7 +59,7 @@ public class EmbeddedJettyApplication implements Runnable {
 		    resource_handler.setWelcomeFiles(new String[]{ "index.html" });	
 		    resource_handler.setResourceBase(this.getClass().getResource("/static").toString());
 		    HandlerList handlers = new HandlerList();
-			handlers.setHandlers(new Handler[] { resource_handler, context });
+			handlers.setHandlers(new Handler[] { resource_handler, context, jerseyContext });
 		    server.setHandler(handlers);
 		 	try {
 				server.start();
