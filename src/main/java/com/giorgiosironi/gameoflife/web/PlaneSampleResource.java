@@ -1,6 +1,5 @@
 package com.giorgiosironi.gameoflife.web;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +8,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.server.mvc.Viewable;
@@ -17,9 +15,6 @@ import org.glassfish.jersey.server.mvc.Viewable;
 import com.giorgiosironi.gameoflife.domain.Cell;
 import com.giorgiosironi.gameoflife.domain.Generation;
 import com.giorgiosironi.gameoflife.view.GenerationWindow;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 
 @Path("planes")
 public class PlaneSampleResource {
@@ -30,15 +25,14 @@ public class PlaneSampleResource {
 	@Path("a-block-and-bar")
 	@Produces("text/html")
 	public Viewable getFirstGeneration() {
-		return getGeneration("0");
+		return getGeneration(0);
 	}
 	
 	@GET
 	@Path("a-block-and-bar/generation/{generation}")
 	// TODO: content negotiation of JSON
 	@Produces("text/html")
-	public Viewable getGeneration(@PathParam("generation") String requestedGenerationParameter) {
-		
+	public Viewable getGeneration(@PathParam("generation") int currentGenerationIndex) {
 		Generation current = Generation.withAliveCells(
 				Cell.onXAndY(1, 1),
 				Cell.onXAndY(1, 2),
@@ -50,45 +44,40 @@ public class PlaneSampleResource {
 				Cell.onXAndY(7, 8)
 		);
 		
-				
-			int requestedGeneration;
-			if (requestedGenerationParameter != null) {
-				requestedGeneration = Integer.parseInt(requestedGenerationParameter);
-				for (int i = 1; i <= requestedGeneration; i++) {
-					current = current.evolve();
-				}
-			} else {
-				requestedGeneration = 0;
-			}
-			
-			GenerationWindow generationWindow = new GenerationWindow(current);
-			Map<String, Object> data = new HashMap<String, Object>();
-            data.put("generation", generationWindow);
-            data.put("generation_index", requestedGeneration);
-            Map<String, String> links = new HashMap<>();
-            data.put("links", links);
-            if (requestedGeneration > 0) {
-            links.put(
-            	"prev",
-            	uriInfo.getBaseUriBuilder()
-            		.path(this.getClass())
-            		.path(this.getClass(), "getGeneration")
-                    .build(requestedGeneration - 1)
-                    .toASCIIString()
-            );
-            }
-            links.put(
-                	"next",
-               
-                	uriInfo.getBaseUriBuilder()
-                		.path(this.getClass())
-                		.path(this.getClass(), "getGeneration")
-                		
-                        .build(requestedGeneration + 1)
-                        .toASCIIString()
-                );
-            
-          
+		for (int i = 1; i <= currentGenerationIndex; i++) {
+			current = current.evolve();
+		}
+		
+		Map<String, Object> data = populateTemplateData(current, currentGenerationIndex);
+      
 	    return new Viewable("/generation.ftl", data);
+	}
+
+	private Map<String, Object> populateTemplateData(Generation current, int currentGeneration) {
+		GenerationWindow generationWindow = new GenerationWindow(current);
+		Map<String, Object> data = new HashMap<String, Object>();
+        data.put("generation", generationWindow);
+        data.put("generation_index", currentGeneration);
+        Map<String, String> links = new HashMap<>();
+        data.put("links", links);
+        if (currentGeneration > 0) {
+        	links.put(
+        		"prev",
+        		linkToAGeneration(currentGeneration - 1)
+        	);
+        }
+        links.put(
+            "next", 
+            linkToAGeneration(currentGeneration + 1)
+        );
+		return data;
+	}
+
+	private String linkToAGeneration(int generationIndex) {
+		return uriInfo.getBaseUriBuilder()
+			.path(this.getClass())
+			.path(this.getClass(), "getGeneration")
+		    .build(generationIndex)
+		    .toASCIIString();
 	}
 }

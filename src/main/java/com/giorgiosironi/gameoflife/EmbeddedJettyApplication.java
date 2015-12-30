@@ -1,7 +1,5 @@
 package com.giorgiosironi.gameoflife;
 
-import java.util.Arrays;
-
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -11,8 +9,6 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.giorgiosironi.gameoflife.web.PingResource;
 
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
@@ -44,7 +40,7 @@ public class EmbeddedJettyApplication implements Runnable {
 	        ServletHolder jerseyServlet = singleServletContext.addServlet(ServletContainer.class, "/*");
 	        jerseyServlet.setInitParameter(
 	        	"javax.ws.rs.Application",
-	        	MyJerseyApplication.class.getCanonicalName()
+	        	WebApplicationResourceConfig.class.getCanonicalName()
 	        );
 	    
 		    ResourceHandler resourceHandler = new ResourceHandler();

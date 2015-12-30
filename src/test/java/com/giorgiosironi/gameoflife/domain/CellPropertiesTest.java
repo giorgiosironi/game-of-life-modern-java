@@ -2,7 +2,6 @@ package com.giorgiosironi.gameoflife.domain;
 
 import static org.junit.Assert.*;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.pholser.junit.quickcheck.Property;
