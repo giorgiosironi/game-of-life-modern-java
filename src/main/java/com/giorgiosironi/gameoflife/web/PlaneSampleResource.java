@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.glassfish.jersey.server.mvc.Viewable;
@@ -16,11 +17,20 @@ import com.giorgiosironi.gameoflife.view.GenerationWindow;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
-@Path("planes/a-block-and-bar")
+@Path("planes")
 public class PlaneSampleResource {
 	@GET
+	@Path("a-block-and-bar")
 	@Produces("text/html")
-	public Viewable getHello() {
+	public Viewable getFirstGeneration() {
+		return getGeneration("0");
+	}
+	
+	@GET
+	@Path("a-block-and-bar/generation/{generation}")
+	// TODO: content negotiation of JSON
+	@Produces("text/html")
+	public Viewable getGeneration(@PathParam("generation") String requestedGenerationParameter) {
 		Generation current = Generation.withAliveCells(
 				Cell.onXAndY(1, 1),
 				Cell.onXAndY(1, 2),
@@ -33,7 +43,7 @@ public class PlaneSampleResource {
 		);
 		
 		// TODO: read from URL
-		String requestedGenerationParameter = null;//request.getParameter("generation");
+		
 			int requestedGeneration;
 			if (requestedGenerationParameter != null) {
 				requestedGeneration = Integer.parseInt(requestedGenerationParameter);
