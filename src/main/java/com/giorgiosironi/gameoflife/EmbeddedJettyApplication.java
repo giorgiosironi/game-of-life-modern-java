@@ -40,17 +40,12 @@ public class EmbeddedJettyApplication implements Runnable {
 
 			ServletContextHandler singleServletContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
 			singleServletContext.setContextPath("/");
-			singleServletContext.addServlet(GameOfLifeServlet.class, "/plane");
 			
-			ServletContextHandler restfulContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
-	        restfulContext.setContextPath("/");
+			singleServletContext.addServlet(GameOfLifeServlet.class, "/plane");
 	        ServletHolder jerseyServlet = singleServletContext.addServlet(ServletContainer.class, "/*");
-	           
 	        jerseyServlet.setInitParameter(
-	            "jersey.config.server.provider.classnames",
-	            String.join(",", Arrays.asList(
-	            	PingResource.class.getCanonicalName()	 
-	            ))
+	        	"javax.ws.rs.Application",
+	        	MyJerseyApplication.class.getCanonicalName()
 	        );
 	    
 		    ResourceHandler resourceHandler = new ResourceHandler();
@@ -58,7 +53,7 @@ public class EmbeddedJettyApplication implements Runnable {
 		    // how to point to a dynamic page?	
 		    resourceHandler.setResourceBase(this.getClass().getResource("/static").toString());
 		    HandlerList handlers = new HandlerList();
-			handlers.setHandlers(new Handler[] { resourceHandler, singleServletContext, restfulContext });
+			handlers.setHandlers(new Handler[] { resourceHandler, singleServletContext });
 		    server.setHandler(handlers);
 		 	try {
 				server.start();
