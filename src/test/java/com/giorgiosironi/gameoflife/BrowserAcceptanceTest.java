@@ -38,7 +38,7 @@ public class BrowserAcceptanceTest {
 
 	@Test
 	public void testLoadsTheFirstGenerationInTheBrowserAndCanMakeItEvolve() throws InterruptedException {
-		driver.get("http://localhost:8080/plane");
+		driver.get("http://localhost:8080/planes/a-block-and-bar");
 		WebElement title = driver.findElement(By.cssSelector("h1"));
 		assertEquals("Game Of Life", title.getText());
 		WebElement generation = driver.findElement(By.cssSelector("table"));
@@ -46,10 +46,16 @@ public class BrowserAcceptanceTest {
 		assertEquals("Should show a 10x10 window over the infinite plane", 100, cells.size());
 		WebElement next = driver.findElement(By.cssSelector("a[rel~=next]"));
 		next.click();
-		assertTrue("Should show the second generation", driver.getCurrentUrl().endsWith("plane?generation=1"));
+		assertTrue(
+			"Should show the second generation but is pointing at " + driver.getCurrentUrl(),
+			driver.getCurrentUrl().endsWith("/generation/1")
+		);
 		WebElement previous = driver.findElement(By.cssSelector("a[rel~=prev]"));
 		previous.click();
-		assertTrue("Should show again the first generation", driver.getCurrentUrl().endsWith("plane?generation=0"));
+		assertTrue(
+			"Should show again the first generation but is pointing at " + driver.getCurrentUrl(),
+			driver.getCurrentUrl().endsWith("/generation/0")
+		);
 	}
 
 }

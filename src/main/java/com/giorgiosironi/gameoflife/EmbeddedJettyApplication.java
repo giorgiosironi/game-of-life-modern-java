@@ -41,7 +41,6 @@ public class EmbeddedJettyApplication implements Runnable {
 			ServletContextHandler singleServletContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
 			singleServletContext.setContextPath("/");
 			
-			singleServletContext.addServlet(GameOfLifeServlet.class, "/plane");
 	        ServletHolder jerseyServlet = singleServletContext.addServlet(ServletContainer.class, "/*");
 	        jerseyServlet.setInitParameter(
 	        	"javax.ws.rs.Application",
