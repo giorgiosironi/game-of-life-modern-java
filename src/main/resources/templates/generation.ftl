@@ -15,13 +15,13 @@
 <div class="navigation">
 	
 	<div class="generation_link">
-		<#if (generation_index>0)>
-		    <a href="/plane?generation=${generation_index - 1}" rel="prev">Previous generation</a>
+		<#if (links.prev??)>
+		    <a href="${links.prev}" rel="prev">Previous generation</a>
 		<#else>
 		    Previous generation
 		</#if>
 	</div>
 	<div class="generation_link">
-		<a href="/plane?generation=${generation_index + 1}" rel="next">Next generation</a>
+		<a href="${links.next}" rel="next">Next generation</a>
 	</div>
 </div>

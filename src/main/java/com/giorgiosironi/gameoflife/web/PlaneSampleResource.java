@@ -1,5 +1,6 @@
 package com.giorgiosironi.gameoflife.web;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +8,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.server.mvc.Viewable;
 
@@ -19,6 +23,9 @@ import freemarker.template.Template;
 
 @Path("planes")
 public class PlaneSampleResource {
+	@Context
+    UriInfo uriInfo;
+	
 	@GET
 	@Path("a-block-and-bar")
 	@Produces("text/html")
@@ -31,6 +38,7 @@ public class PlaneSampleResource {
 	// TODO: content negotiation of JSON
 	@Produces("text/html")
 	public Viewable getGeneration(@PathParam("generation") String requestedGenerationParameter) {
+		
 		Generation current = Generation.withAliveCells(
 				Cell.onXAndY(1, 1),
 				Cell.onXAndY(1, 2),
@@ -42,8 +50,7 @@ public class PlaneSampleResource {
 				Cell.onXAndY(7, 8)
 		);
 		
-		// TODO: read from URL
-		
+				
 			int requestedGeneration;
 			if (requestedGenerationParameter != null) {
 				requestedGeneration = Integer.parseInt(requestedGenerationParameter);
@@ -58,6 +65,29 @@ public class PlaneSampleResource {
 			Map<String, Object> data = new HashMap<String, Object>();
             data.put("generation", generationWindow);
             data.put("generation_index", requestedGeneration);
+            Map<String, String> links = new HashMap<>();
+            data.put("links", links);
+            if (requestedGeneration > 0) {
+            links.put(
+            	"prev",
+            	uriInfo.getBaseUriBuilder()
+            		.path(this.getClass())
+            		.path(this.getClass(), "getGeneration")
+                    .build(requestedGeneration - 1)
+                    .toASCIIString()
+            );
+            }
+            links.put(
+                	"next",
+               
+                	uriInfo.getBaseUriBuilder()
+                		.path(this.getClass())
+                		.path(this.getClass(), "getGeneration")
+                		
+                        .build(requestedGeneration + 1)
+                        .toASCIIString()
+                );
+            
           
 	    return new Viewable("/generation.ftl", data);
 	}
