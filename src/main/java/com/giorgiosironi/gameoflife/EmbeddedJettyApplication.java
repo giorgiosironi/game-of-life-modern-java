@@ -1,5 +1,7 @@
 package com.giorgiosironi.gameoflife;
 
+import java.util.Arrays;
+
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -36,30 +38,27 @@ public class EmbeddedJettyApplication implements Runnable {
 			startupFinished = false;
 			server = new Server(PORT);
 
-			ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-			context.setContextPath("/");
-			context.addServlet(GameOfLifeServlet.class, "/plane");
+			ServletContextHandler singleServletContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
+			singleServletContext.setContextPath("/");
+			singleServletContext.addServlet(GameOfLifeServlet.class, "/plane");
 			
-			ServletContextHandler jerseyContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
-	        jerseyContext.setContextPath("/ping");
-	        ServletHolder jerseyServlet = context.addServlet(
-	               ServletContainer.class, "/*");
-	           jerseyServlet.setInitOrder(0);
-	    
-	           // Tells the Jersey Servlet which REST service/class to load./
+			ServletContextHandler restfulContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
+	        restfulContext.setContextPath("/");
+	        ServletHolder jerseyServlet = singleServletContext.addServlet(ServletContainer.class, "/*");
 	           
-	           jerseyServlet.setInitParameter(
-	              "jersey.config.server.provider.classnames",
-	             PingResource.class.getCanonicalName());
-	             
-
-		    ResourceHandler resource_handler = new ResourceHandler();
-		    resource_handler.setDirectoriesListed(true);
-		    // how to point to a dynamic page?
-		    resource_handler.setWelcomeFiles(new String[]{ "index.html" });	
-		    resource_handler.setResourceBase(this.getClass().getResource("/static").toString());
+	        jerseyServlet.setInitParameter(
+	            "jersey.config.server.provider.classnames",
+	            String.join(",", Arrays.asList(
+	            	PingResource.class.getCanonicalName()	 
+	            ))
+	        );
+	    
+		    ResourceHandler resourceHandler = new ResourceHandler();
+		    resourceHandler.setDirectoriesListed(true);
+		    // how to point to a dynamic page?	
+		    resourceHandler.setResourceBase(this.getClass().getResource("/static").toString());
 		    HandlerList handlers = new HandlerList();
-			handlers.setHandlers(new Handler[] { resource_handler, context, jerseyContext });
+			handlers.setHandlers(new Handler[] { resourceHandler, singleServletContext, restfulContext });
 		    server.setHandler(handlers);
 		 	try {
 				server.start();
