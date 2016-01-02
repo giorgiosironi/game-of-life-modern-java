@@ -7,6 +7,8 @@ This is an implementation of Conway's Game Of Life, a zero-player game featuring
 - Any live cell with more than three live neighbours dies, as if by over-population.
 - Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 
+[Sample screen from this application](sample.png)
+
 ([Game Of Life on Wikipedia](https://en.wikipedia.org/wiki/Conway's_Game_of_Life]))
 
 The Game Of Life is a common kata to exercise in a code retreat, or to get your feet wet with a different technology. Keep the problem the same and change the conditions around it to cover new ground.
