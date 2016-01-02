@@ -10,9 +10,6 @@ import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import sun.misc.Signal;
-import sun.misc.SignalHandler;
-
 public class EmbeddedJettyApplication implements Runnable {
 
 	private Server server;
@@ -100,12 +97,11 @@ public class EmbeddedJettyApplication implements Runnable {
 	}
 	
 	public static void main(String args[]) {
-		
-		EmbeddedJettyApplication application = new EmbeddedJettyApplication();
-		Signal.handle(new Signal("INT"), new SignalHandler () {
-		    public void handle(Signal sig) {
+		final EmbeddedJettyApplication application = new EmbeddedJettyApplication();
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
 		        application.stop();
-		    }
+			}
 		});
 		application.run();
 	}
