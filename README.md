@@ -13,6 +13,8 @@ The Game Of Life is a common kata to exercise in a code retreat, or to get your 
 
 ## Technologies used
 
+This project tries to take a modern approach to Java software development, producing a self-contained application which embeds everything needed to run on any JVM in a development, CI or production environment. 
+
 - [Gradle](http://gradle.org/) for build automation and dependency resolution (substitutes both Ant and Maven)
 - [Jetty](http://www.eclipse.org/jetty/) as an embedded server to respond to HTTP requests
 - [Jersey](https://jersey.java.net/) for building the RESTful web service calculating new generations of a plane, using JAX-RS
@@ -26,3 +28,30 @@ On the testing side of things:
 - [JUnit Quickcheck](https://github.com/pholser/junit-quickcheck) for property-based testing
 - [Selenium](http://www.seleniumhq.org/) for browser-based testing
 
+## How to run
+
+Clone the project, then run:
+
+```
+./gradlew
+```
+
+The Gradle Wrapper will install itself.
+
+Run
+
+```
+./gradlew test
+```
+
+to run unit, property-based and Selenium tests.
+
+Then run
+
+```
+./gradlew installDist
+cd build/install/game-of-life
+bin/game-of-life
+```
+
+to install an instance in the build/ subfolder. Load http://localhost:8080/planes/a-block-and-bar in your browser to see the evolution of a test plane. The patterns featured in the sample are a stable block and a rotating bar, along with a lone cell vanishing after the first generation.

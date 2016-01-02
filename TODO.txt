@@ -1,2 +1,5 @@
-- multiple instances of the plane, making persistence into any database necessary
+- compiler warnings for the usage of signal handling
+
+Evolutions:
+- multiple instances of the plane, making persistence into any database necessary (MongoDB driver)
 - performance optimization along with tests of these data structures
