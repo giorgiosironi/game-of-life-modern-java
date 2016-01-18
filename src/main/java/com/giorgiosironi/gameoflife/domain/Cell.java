@@ -17,10 +17,13 @@ public final class Cell {
 		return new Cell(x, y);
 	}
 	
+	@Override
 	public int hashCode() {
+		// TODO: improve performance
 		return 0;
 	}
 	
+	@Override
 	public boolean equals(Object candidate)
 	{
 		if (!(candidate instanceof Cell)) {
