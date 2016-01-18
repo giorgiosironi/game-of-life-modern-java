@@ -1,6 +1,7 @@
 package com.giorgiosironi.gameoflife.domain;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
@@ -35,25 +36,43 @@ public class InMemoryGenerationRepository implements GenerationRepository {
 		}
 	}
 
-	private Map<Key, Generation> contents = new ConcurrentHashMap<Key,Generation>();
+	private Map<String, Map<Integer,Generation>> contents = new ConcurrentHashMap<>();
 	private Logger logger = LoggerFactory.getLogger(InMemoryGenerationRepository.class);
 
-	public void add(String name, int index, Generation single) {
-		this.contents.put(
-			Key.fromNameAndIndex(name, index),
-			single
-		);
+	public void add(String name, int index, Generation generation) {
+		// TODO: use TreeMap and floorKey()
+		this.contents.putIfAbsent(name, new ConcurrentHashMap<>());
+		this.contents.get(name).put(index, generation);
 	}
 
 	public Generation get(String name, int index) {
-		Generation generation = this.contents.get(
-			Key.fromNameAndIndex(name, index)
+		Map<Integer,Generation> generations = this.contents.get(
+			name
 		);
-		if (generation != null) {
-			logger.info(String.format("Cache hit: %s,%d", name, index));
-		} else {
-			logger.info(String.format("Cache miss: %s,%d", name, index));
+		
+		if (generations != null) {
+			Generation generation = generations.get(index);
+			if (generation != null) {
+				logger.info(String.format("Cache hit: %s,%d", name, index));
+				return generation;
+			} else {
+				Optional<Integer> best = generations.keySet()
+					.stream()
+					.filter((candidate) -> candidate < index)
+					.max((a, b) -> a - b);
+
+				if (best.isPresent()) {
+					logger.info(String.format("Partial cache hit: %s,%d", name, index));
+					Generation current = generations.get(best.get());
+					for (int i = best.get() + 1; i <= index; i++) {
+						current = current.evolve();
+					}
+					return current;
+				}
+			}
 		}
-		return generation;
+		
+		logger.info(String.format("Cache miss: %s,%d", name, index));
+		return null;
 	}
 }

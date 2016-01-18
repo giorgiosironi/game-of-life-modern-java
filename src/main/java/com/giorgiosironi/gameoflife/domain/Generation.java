@@ -22,6 +22,19 @@ public final class Generation implements Plane {
 		return new Generation(set);
 	}
 	
+	public static Generation empty() {
+		return Generation.withAliveCells();
+	}
+	
+	public static Generation blockAt(int x, int y) {
+		return Generation.withAliveCells(
+			Cell.onXAndY(x, y),
+			Cell.onXAndY(x + 1, y),
+			Cell.onXAndY(x, y + 1),
+			Cell.onXAndY(x + 1, y + 1)
+		);
+	}
+	
 	public State state(int x, int y) {
 		return state(Cell.onXAndY(x, y));
 	}
@@ -77,6 +90,6 @@ public final class Generation implements Plane {
 	
 	@Override
 	public String toString() {
-		return aliveCells.toString();
-	}
+		return "Generation: " + aliveCells.toString();
+	}	
 }
