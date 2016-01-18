@@ -60,5 +60,18 @@ public final class Generation implements Plane {
 	public int countAlive() {
 		return aliveCells.size();
 	}
+	
+	@Override
+	public boolean equals(Object anotherObject) {
+		if (!(anotherObject instanceof Generation)) {
+			return false;
+		}
+		Generation another = (Generation) anotherObject;
+		return aliveCells.equals(another.aliveCells);
+	}
 
+	@Override
+	public int hashCode() {
+		return aliveCells.hashCode();
+	}
 }
