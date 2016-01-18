@@ -49,7 +49,7 @@ public final class Generation implements Plane {
 	private Zone allCandidateToBeAliveInTheNextGeneration() {
 		Zone toCalculate = aliveCells
 			.stream()
-			.map((Cell alive) -> alive.block())
+			.map((alive) -> alive.block())
 			.reduce(
 				Zone.empty(), 
 				(Zone z1, Zone z2) -> z1.union(z2)
