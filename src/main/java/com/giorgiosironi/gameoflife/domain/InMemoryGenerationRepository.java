@@ -1,8 +1,11 @@
 package com.giorgiosironi.gameoflife.domain;
 
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.NavigableMap;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,39 +39,33 @@ public class InMemoryGenerationRepository implements GenerationRepository {
 		}
 	}
 
-	private Map<String, Map<Integer,Generation>> contents = new ConcurrentHashMap<>();
+	private Map<String, NavigableMap<Integer,Generation>> contents = new ConcurrentHashMap<>();
 	private Logger logger = LoggerFactory.getLogger(InMemoryGenerationRepository.class);
 
 	public void add(String name, int index, Generation generation) {
-		// TODO: use TreeMap and floorKey()
-		this.contents.putIfAbsent(name, new ConcurrentHashMap<>());
+		this.contents.putIfAbsent(name, new ConcurrentSkipListMap<>());
 		this.contents.get(name).put(index, generation);
 	}
 
 	public Generation get(String name, int index) {
-		Map<Integer,Generation> generations = this.contents.get(
+		NavigableMap<Integer,Generation> generations = this.contents.get(
 			name
 		);
 		
 		if (generations != null) {
-			Generation generation = generations.get(index);
-			if (generation != null) {
+			Entry<Integer, Generation> best = generations.floorEntry(index);
+			if (best == null) {
+				// cache miss, fall through
+			} else if (best.getKey().equals(index)) {
 				logger.info(String.format("Cache hit: %s,%d", name, index));
-				return generation;
+				return best.getValue();
 			} else {
-				Optional<Integer> best = generations.keySet()
-					.stream()
-					.filter((candidate) -> candidate < index)
-					.max((a, b) -> a - b);
-
-				if (best.isPresent()) {
-					logger.info(String.format("Partial cache hit: %s,%d", name, index));
-					Generation current = generations.get(best.get());
-					for (int i = best.get() + 1; i <= index; i++) {
-						current = current.evolve();
-					}
-					return current;
+				logger.info(String.format("Partial cache hit: %s,%d", name, index));
+				Generation current = best.getValue();
+				for (int i = best.getKey() + 1; i <= index; i++) {
+					current = current.evolve();
 				}
+				return current;
 			}
 		}
 		
