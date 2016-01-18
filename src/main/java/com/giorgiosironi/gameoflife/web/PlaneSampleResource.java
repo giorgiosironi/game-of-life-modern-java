@@ -32,7 +32,9 @@ public class PlaneSampleResource {
 	@Path("a-block-and-bar/generation/{generation}")
 	// TODO: content negotiation of JSON
 	@Produces("text/html")
-	public Viewable getGeneration(@PathParam("generation") int currentGenerationIndex) {
+	public Viewable getGeneration(
+			@PathParam("generation") int currentGenerationIndex
+		) {
 		Generation current = Generation.withAliveCells(
 				Cell.onXAndY(1, 1),
 				Cell.onXAndY(1, 2),
