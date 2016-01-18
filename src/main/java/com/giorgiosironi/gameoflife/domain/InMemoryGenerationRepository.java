@@ -1,7 +1,7 @@
 package com.giorgiosironi.gameoflife.domain;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ public class InMemoryGenerationRepository implements GenerationRepository {
 		}
 	}
 
-	private Map<Key, Generation> contents = new HashMap<Key,Generation>();
+	private Map<Key, Generation> contents = new ConcurrentHashMap<Key,Generation>();
 	private Logger logger = LoggerFactory.getLogger(InMemoryGenerationRepository.class);
 
 	public void add(String name, int index, Generation single) {
