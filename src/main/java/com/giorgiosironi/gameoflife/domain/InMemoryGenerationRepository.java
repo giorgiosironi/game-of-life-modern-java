@@ -3,7 +3,10 @@ package com.giorgiosironi.gameoflife.domain;
 import java.util.HashMap;
 import java.util.Map;
 
-public class InMemoryGenerationRepository {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class InMemoryGenerationRepository implements GenerationRepository {
 	private static final class Key {
 		
 		private String value;
@@ -32,11 +35,8 @@ public class InMemoryGenerationRepository {
 		}
 	}
 
-	private Map<Key, Generation> contents;
-	
-	public InMemoryGenerationRepository() {
-		this.contents = new HashMap<Key,Generation>();
-	}
+	private Map<Key, Generation> contents = new HashMap<Key,Generation>();
+	private Logger logger = LoggerFactory.getLogger(InMemoryGenerationRepository.class);
 
 	public void add(String name, int index, Generation single) {
 		this.contents.put(
@@ -46,8 +46,14 @@ public class InMemoryGenerationRepository {
 	}
 
 	public Generation get(String name, int index) {
-		return this.contents.get(
+		Generation generation = this.contents.get(
 			Key.fromNameAndIndex(name, index)
 		);
+		if (generation != null) {
+			logger.info(String.format("Cache hit: %s,%d", name, index));
+		} else {
+			logger.info(String.format("Cache miss: %s,%d", name, index));
+		}
+		return generation;
 	}
 }

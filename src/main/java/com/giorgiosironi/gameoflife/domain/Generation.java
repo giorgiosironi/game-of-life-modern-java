@@ -74,4 +74,9 @@ public final class Generation implements Plane {
 	public int hashCode() {
 		return aliveCells.hashCode();
 	}
+	
+	@Override
+	public String toString() {
+		return aliveCells.toString();
+	}
 }
