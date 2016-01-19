@@ -5,7 +5,6 @@ import java.util.Set;
 
 public final class Generation implements Plane {
 
-	// TODO: rename to aliveCells?
 	private Set<Cell> aliveCells;
 	private ClassicRules rules;
 
@@ -32,6 +31,22 @@ public final class Generation implements Plane {
 			Cell.onXAndY(x + 1, y),
 			Cell.onXAndY(x, y + 1),
 			Cell.onXAndY(x + 1, y + 1)
+		);
+	}
+	
+	public static Generation horizontalBarAt(int x, int y) {
+		return Generation.withAliveCells(
+			Cell.onXAndY(x, y),
+			Cell.onXAndY(x + 1, y),
+			Cell.onXAndY(x + 2, y)
+		);
+	}
+	
+	public static Generation verticalBarAt(int x, int y) {
+		return Generation.withAliveCells(
+			Cell.onXAndY(x, y),
+			Cell.onXAndY(x, y + 1),
+			Cell.onXAndY(x, y + 2)
 		);
 	}
 	
@@ -91,5 +106,5 @@ public final class Generation implements Plane {
 	@Override
 	public String toString() {
 		return "Generation: " + aliveCells.toString();
-	}	
+	}
 }
