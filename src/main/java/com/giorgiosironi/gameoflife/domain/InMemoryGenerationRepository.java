@@ -58,18 +58,18 @@ public class InMemoryGenerationRepository implements GenerationRepository {
 				// cache miss, fall through
 			} else if (best.getKey().equals(index)) {
 				logger.info(String.format("Cache hit: %s,%d", name, index));
-				return new GenerationResult(best.getValue(), GenerationResult.Efficiency.HIT);
+				return GenerationResult.hit(best.getValue());
 			} else {
 				logger.info(String.format("Partial cache hit: %s,%d", name, index));
 				Generation current = best.getValue();
 				for (int i = best.getKey() + 1; i <= index; i++) {
 					current = current.evolve();
 				}
-				return new GenerationResult(current, GenerationResult.Efficiency.PARTIAL_HIT);
+				return GenerationResult.partialHit(current);
 			}
 		}
 		
 		logger.info(String.format("Cache miss: %s,%d", name, index));
-		return new GenerationResult(null, GenerationResult.Efficiency.MISS);
+		return GenerationResult.miss();
 	}
 }

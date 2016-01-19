@@ -2,6 +2,9 @@ package com.giorgiosironi.gameoflife.domain;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -9,6 +12,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import org.junit.Test;
+
+import com.giorgiosironi.gameoflife.domain.GenerationRepository.GenerationResult;
+import com.giorgiosironi.gameoflife.domain.GenerationRepository.GenerationResult.Efficiency;
 
 public class InMemoryGenerationRepositoryTest {
 	
@@ -18,39 +24,57 @@ public class InMemoryGenerationRepositoryTest {
 	public void storesAGenerationAccordingToANameAndIndex() {
 		Generation single = Generation.withAliveCells(Cell.onXAndY(0, 1));
 		repository.add("single", 4, single);
-		assertEquals(single, repository.get("single", 4).generation());
+		assertEquals(
+			GenerationResult.hit(single),
+			repository.get("single", 4)
+		);
 	}
 	
 	@Test
 	public void missingValuesReturnNull() {
-		assertNull(repository.get("single", 4).generation());
+		assertEquals(
+			GenerationResult.miss(),
+			repository.get("single", 4)
+		);
 	}
 	
 	@Test
 	public void outdatedValuesCanBeUsedToCalculateAMoreRecentGeneration() {
 		Generation single = Generation.withAliveCells(Cell.onXAndY(0, 1));
 		repository.add("single", 3, single);
-		assertEquals(Generation.empty(), repository.get("single", 4).generation());
+		assertEquals(
+			GenerationResult.partialHit(Generation.empty()),
+			repository.get("single", 4)
+		);
 	}
 	
 	@Test
 	public void theMostRecentGenerationOfAPlaneIsUsedToCalculateTheMoreRecentOne() {		
 		repository.add("single", 2, Generation.withAliveCells(Cell.onXAndY(0, 1)));
 		repository.add("single", 3, Generation.blockAt(0, 1));
-		assertEquals(Generation.blockAt(0, 1), repository.get("single", 4).generation());
+		assertEquals(
+			GenerationResult.partialHit(Generation.blockAt(0, 1)),
+			repository.get("single", 4)
+		);
 	}
 	
 	@Test
 	public void multipleGenerationsCanBeCachedTogether() {
 		repository.add("single", 3, Generation.blockAt(0, 1));
 		repository.add("single", 2, Generation.withAliveCells(Cell.onXAndY(0, 1)));
-		assertEquals(Generation.blockAt(0, 1), repository.get("single", 4).generation());
+		assertEquals(
+			GenerationResult.partialHit(Generation.blockAt(0, 1)),
+			repository.get("single", 4)
+		);
 	}
 	
 	@Test
 	public void previousGenerationsCannotBeCalculatedFromAMoreRecentOne() {
 		repository.add("single", 4, Generation.withAliveCells(Cell.onXAndY(0, 1)));
-		assertNull(repository.get("single", 3).generation());
+		assertEquals(
+			GenerationResult.miss(),
+			repository.get("single", 3)
+		);
 	}
 	
 	int threads = 10;
@@ -69,17 +93,22 @@ public class InMemoryGenerationRepositoryTest {
 		Generation block = Generation.blockAt(0, 1);
 		Generation horizontalBar = Generation.horizontalBarAt(0, 1);
 		Generation verticalBar = Generation.verticalBarAt(1, 0);
+		final List<List<Efficiency>> sequences = Collections.synchronizedList(new ArrayList<>());
 		for (int i = 0; i < threads; i++) {
 			String plane = "plane-" + i;
+			List<Efficiency> sequence = Collections.synchronizedList(new ArrayList<>());
+			sequences.add(sequence);
 			if (i % 2 == 0) {
 				executor.execute(new SinglePlaneUser(
 					block,
 					plane,
 					(j) -> {
+						GenerationResult result = repository.get(plane, j);
 						assertEquals(
 							block,
-							repository.get(plane, j).generation()
+							result.generation()
 						);
+						sequence.add(result.efficiency());
 					}
 				));
 			} else {
@@ -87,23 +116,32 @@ public class InMemoryGenerationRepositoryTest {
 					horizontalBar,
 					plane,
 					(j) -> {
+						GenerationResult result = repository.get(plane, j);
 						if (j % 2 == 0) {
 							assertEquals(
 								horizontalBar,
-								repository.get(plane, j).generation()
+								result.generation()
 							);
 						} else {
 							assertEquals(
 								verticalBar,
-								repository.get(plane, j).generation()
+								result.generation()
 							);
 						}
+						sequence.add(result.efficiency());
 					}
 				));
 			}
 		}
 		executor.shutdown();
 		executor.awaitTermination(10, TimeUnit.SECONDS);
+		for (List<Efficiency> sequence: sequences) {
+			assertEquals(iterations, sequence.size());
+			assertEquals(Efficiency.HIT, sequence.get(0));
+			for (int i = 1; i < sequence.size(); i++) {
+				assertEquals(Efficiency.PARTIAL_HIT, sequence.get(i));
+			}
+		}
 	}
 	
 	private class SinglePlaneUser implements Runnable {
