@@ -47,7 +47,7 @@ public class InMemoryGenerationRepository implements GenerationRepository {
 		this.contents.get(name).put(index, generation);
 	}
 
-	public Generation get(String name, int index) {
+	public GenerationResult get(String name, int index) {
 		NavigableMap<Integer,Generation> generations = this.contents.get(
 			name
 		);
@@ -58,18 +58,18 @@ public class InMemoryGenerationRepository implements GenerationRepository {
 				// cache miss, fall through
 			} else if (best.getKey().equals(index)) {
 				logger.info(String.format("Cache hit: %s,%d", name, index));
-				return best.getValue();
+				return new GenerationResult(best.getValue(), GenerationResult.Efficiency.HIT);
 			} else {
 				logger.info(String.format("Partial cache hit: %s,%d", name, index));
 				Generation current = best.getValue();
 				for (int i = best.getKey() + 1; i <= index; i++) {
 					current = current.evolve();
 				}
-				return current;
+				return new GenerationResult(current, GenerationResult.Efficiency.PARTIAL_HIT);
 			}
 		}
 		
 		logger.info(String.format("Cache miss: %s,%d", name, index));
-		return null;
+		return new GenerationResult(null, GenerationResult.Efficiency.MISS);
 	}
 }

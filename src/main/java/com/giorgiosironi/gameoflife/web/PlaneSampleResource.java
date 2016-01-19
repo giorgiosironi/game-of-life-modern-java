@@ -53,7 +53,7 @@ public class PlaneSampleResource {
 		);
 		
 		Generation current;
-		Generation cached = repository.get(plane, currentGenerationIndex);
+		Generation cached = repository.get(plane, currentGenerationIndex).generation();
 		if (cached != null) {
 			current = cached;
 		} else {

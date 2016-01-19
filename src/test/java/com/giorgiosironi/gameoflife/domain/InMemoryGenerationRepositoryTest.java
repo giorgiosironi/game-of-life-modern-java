@@ -18,39 +18,39 @@ public class InMemoryGenerationRepositoryTest {
 	public void storesAGenerationAccordingToANameAndIndex() {
 		Generation single = Generation.withAliveCells(Cell.onXAndY(0, 1));
 		repository.add("single", 4, single);
-		assertEquals(single, repository.get("single", 4));
+		assertEquals(single, repository.get("single", 4).generation());
 	}
 	
 	@Test
 	public void missingValuesReturnNull() {
-		assertNull(repository.get("single", 4));
+		assertNull(repository.get("single", 4).generation());
 	}
 	
 	@Test
 	public void outdatedValuesCanBeUsedToCalculateAMoreRecentGeneration() {
 		Generation single = Generation.withAliveCells(Cell.onXAndY(0, 1));
 		repository.add("single", 3, single);
-		assertEquals(Generation.empty(), repository.get("single", 4));
+		assertEquals(Generation.empty(), repository.get("single", 4).generation());
 	}
 	
 	@Test
 	public void theMostRecentGenerationOfAPlaneIsUsedToCalculateTheMoreRecentOne() {		
 		repository.add("single", 2, Generation.withAliveCells(Cell.onXAndY(0, 1)));
 		repository.add("single", 3, Generation.blockAt(0, 1));
-		assertEquals(Generation.blockAt(0, 1), repository.get("single", 4));
+		assertEquals(Generation.blockAt(0, 1), repository.get("single", 4).generation());
 	}
 	
 	@Test
 	public void multipleGenerationsCanBeCachedTogether() {
 		repository.add("single", 3, Generation.blockAt(0, 1));
 		repository.add("single", 2, Generation.withAliveCells(Cell.onXAndY(0, 1)));
-		assertEquals(Generation.blockAt(0, 1), repository.get("single", 4));
+		assertEquals(Generation.blockAt(0, 1), repository.get("single", 4).generation());
 	}
 	
 	@Test
 	public void previousGenerationsCannotBeCalculatedFromAMoreRecentOne() {
 		repository.add("single", 4, Generation.withAliveCells(Cell.onXAndY(0, 1)));
-		assertNull(repository.get("single", 3));
+		assertNull(repository.get("single", 3).generation());
 	}
 	
 	int threads = 10;
@@ -78,7 +78,7 @@ public class InMemoryGenerationRepositoryTest {
 					(j) -> {
 						assertEquals(
 							block,
-							repository.get(plane, j)
+							repository.get(plane, j).generation()
 						);
 					}
 				));
@@ -90,12 +90,12 @@ public class InMemoryGenerationRepositoryTest {
 						if (j % 2 == 0) {
 							assertEquals(
 								horizontalBar,
-								repository.get(plane, j)
+								repository.get(plane, j).generation()
 							);
 						} else {
 							assertEquals(
 								verticalBar,
-								repository.get(plane, j)
+								repository.get(plane, j).generation()
 							);
 						}
 					}
