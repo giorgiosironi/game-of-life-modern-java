@@ -3,42 +3,13 @@ package com.giorgiosironi.gameoflife.domain;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class InMemoryGenerationRepository implements GenerationRepository {
-	private static final class Key {
-		
-		private String value;
-
-		public static Key fromNameAndIndex(String name, int index) {
-			return new Key(name + "/" + index);
-		}
-		
-		private Key(String value) {
-			this.value = value;
-		}
-		
-		@Override
-		public boolean equals(Object anotherObject) {
-			if (!(anotherObject instanceof Key)) {
-				return false;
-			}
-			Key another = (Key) anotherObject;
-			
-			return value.equals(another.value);
-		}
-		
-		@Override
-		public int hashCode() {
-			return value.hashCode();
-		}
-	}
-
+public final class InMemoryGenerationRepository implements GenerationRepository {
 	private Map<String, NavigableMap<Integer,Generation>> contents = new ConcurrentHashMap<>();
 	private Logger logger = LoggerFactory.getLogger(InMemoryGenerationRepository.class);
 
