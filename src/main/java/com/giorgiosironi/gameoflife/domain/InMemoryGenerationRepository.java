@@ -65,7 +65,7 @@ public class InMemoryGenerationRepository implements GenerationRepository {
 				for (int i = best.getKey() + 1; i <= index; i++) {
 					current = current.evolve();
 				}
-				return GenerationResult.partialHit(current);
+				return GenerationResult.partialHit(current, index - best.getKey());
 			}
 		}
 		

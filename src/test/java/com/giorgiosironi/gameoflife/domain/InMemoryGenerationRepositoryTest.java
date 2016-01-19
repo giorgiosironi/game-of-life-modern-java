@@ -43,7 +43,7 @@ public class InMemoryGenerationRepositoryTest {
 		Generation single = Generation.withAliveCells(Cell.onXAndY(0, 1));
 		repository.add("single", 3, single);
 		assertEquals(
-			GenerationResult.partialHit(Generation.empty()),
+			GenerationResult.partialHit(Generation.empty(), 1),
 			repository.get("single", 4)
 		);
 	}
@@ -53,8 +53,8 @@ public class InMemoryGenerationRepositoryTest {
 		repository.add("single", 2, Generation.withAliveCells(Cell.onXAndY(0, 1)));
 		repository.add("single", 3, Generation.blockAt(0, 1));
 		assertEquals(
-			GenerationResult.partialHit(Generation.blockAt(0, 1)),
-			repository.get("single", 4)
+			GenerationResult.partialHit(Generation.blockAt(0, 1), 2),
+			repository.get("single", 5)
 		);
 	}
 	
@@ -63,8 +63,8 @@ public class InMemoryGenerationRepositoryTest {
 		repository.add("single", 3, Generation.blockAt(0, 1));
 		repository.add("single", 2, Generation.withAliveCells(Cell.onXAndY(0, 1)));
 		assertEquals(
-			GenerationResult.partialHit(Generation.blockAt(0, 1)),
-			repository.get("single", 4)
+			GenerationResult.partialHit(Generation.blockAt(0, 1), 2),
+			repository.get("single", 5)
 		);
 	}
 	
