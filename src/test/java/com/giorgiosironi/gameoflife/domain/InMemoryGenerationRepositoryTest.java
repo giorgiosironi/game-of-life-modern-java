@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -183,7 +184,51 @@ public class InMemoryGenerationRepositoryTest {
 				e.printStackTrace();
 			}
 			
+		}	
+	}
+	
+	// TODO: separate in another suite, it takes so long to run
+	@Test
+	public void concurrentAccessesToTheSamePlaneNeverLosesReturnedGenerationsAsFutureSureHits() throws InterruptedException {
+		iterations = 1000;
+		int generations = 100;
+		for (int k = 0; k < iterations; k++) {
+			ExecutorService executor = Executors.newCachedThreadPool();
+			final String plane = "sample-" + k; 
+			repository.add(plane, 0, Generation.blockAt(0, 1));
+			barrier = new CyclicBarrier(threads);
+			final List<String> errors  = Collections.synchronizedList(new ArrayList<>());
+			for (int i = 0; i < threads; i++) {
+				executor.execute(() -> {
+					try {
+						for (int j = 0; j < generations; j++) {
+							Random random = new Random();
+							int index = random.nextInt(10000) + 1;
+							barrier.await();
+							GenerationResult firstTry = repository.get(plane, index);
+							if (firstTry.efficiency().equals(Efficiency.MISS)) {
+								errors.add("The generation at index " + index + " is missing");
+							}
+							GenerationResult secondTry = repository.get(plane, index);
+							if (!Efficiency.HIT.equals(secondTry.efficiency())){
+								errors.add(
+									"Error while retrieving generation the 2nd time for index "
+									+ index
+									+ ". Efficiency was "
+									+ secondTry.efficiency()
+								);
+							}
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}		
+				});
+			}
+			executor.shutdown();
+			executor.awaitTermination(10, TimeUnit.SECONDS);
+			if (errors.size() > 0) {
+				fail(errors.toString());
+			}
 		}
-		
 	}
 }

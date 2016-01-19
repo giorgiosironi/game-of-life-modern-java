@@ -3,6 +3,7 @@ package com.giorgiosironi.gameoflife.domain;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
@@ -15,6 +16,8 @@ public final class InMemoryGenerationRepository implements GenerationRepository 
 
 	public void add(String name, int index, Generation generation) {
 		this.contents.putIfAbsent(name, new ConcurrentSkipListMap<>());
+		// use to demonstrate concurrency bug
+		//this.contents.putIfAbsent(name, new TreeMap<>());
 		this.contents.get(name).put(index, generation);
 	}
 
@@ -43,5 +46,12 @@ public final class InMemoryGenerationRepository implements GenerationRepository 
 		
 		logger.info(String.format("Cache miss: %s,%d", name, index));
 		return GenerationResult.miss();
+	}
+	
+	public int size() {
+		return contents.values()
+			.stream()
+			.map((generations) -> generations.size())
+			.reduce(0, (a, b) -> a + b);
 	}
 }
