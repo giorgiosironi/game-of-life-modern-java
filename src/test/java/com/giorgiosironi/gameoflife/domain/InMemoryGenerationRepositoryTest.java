@@ -93,11 +93,14 @@ public class InMemoryGenerationRepositoryTest {
 		Generation block = Generation.blockAt(0, 1);
 		Generation horizontalBar = Generation.horizontalBarAt(0, 1);
 		Generation verticalBar = Generation.verticalBarAt(1, 0);
-		final List<List<Efficiency>> sequences = Collections.synchronizedList(new ArrayList<>());
+		final List<List<Efficiency>> efficiencySequences = Collections.synchronizedList(new ArrayList<>());
+		final List<List<Integer>> calculationSequences = Collections.synchronizedList(new ArrayList<>());
 		for (int i = 0; i < threads; i++) {
 			String plane = "plane-" + i;
-			List<Efficiency> sequence = Collections.synchronizedList(new ArrayList<>());
-			sequences.add(sequence);
+			List<Efficiency> efficiencySequence = Collections.synchronizedList(new ArrayList<>());
+			efficiencySequences.add(efficiencySequence);
+			List<Integer> calculationSequence = Collections.synchronizedList(new ArrayList<>());
+			calculationSequences.add(calculationSequence);
 			if (i % 2 == 0) {
 				executor.execute(new SinglePlaneUser(
 					block,
@@ -108,7 +111,8 @@ public class InMemoryGenerationRepositoryTest {
 							block,
 							result.generation()
 						);
-						sequence.add(result.efficiency());
+						efficiencySequence.add(result.efficiency());
+						calculationSequence.add(result.calculations());
 					}
 				));
 			} else {
@@ -128,18 +132,28 @@ public class InMemoryGenerationRepositoryTest {
 								result.generation()
 							);
 						}
-						sequence.add(result.efficiency());
+						efficiencySequence.add(result.efficiency());
+						calculationSequence.add(result.calculations());
 					}
 				));
 			}
 		}
 		executor.shutdown();
 		executor.awaitTermination(10, TimeUnit.SECONDS);
-		for (List<Efficiency> sequence: sequences) {
+		for (List<Efficiency> sequence: efficiencySequences) {
 			assertEquals(iterations, sequence.size());
 			assertEquals(Efficiency.HIT, sequence.get(0));
 			for (int i = 1; i < sequence.size(); i++) {
 				assertEquals(Efficiency.PARTIAL_HIT, sequence.get(i));
+			}
+		}
+		for (List<Integer> sequence: calculationSequences) {
+			assertEquals(iterations, sequence.size());
+			for (int i = 1; i < sequence.size(); i++) {
+				assertTrue(
+					"Only one step of evolution should be performed when accessing serially a plane's generations: " + sequence,
+					sequence.get(i).equals(1)
+				);
 			}
 		}
 	}
