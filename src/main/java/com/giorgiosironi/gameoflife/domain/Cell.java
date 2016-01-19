@@ -5,8 +5,8 @@ import java.util.List;
 
 public final class Cell {
 
-	private int x;
-	private int y;
+	private final int x;
+	private final int y;
 
 	private Cell(int x, int y) {
 		this.x = x;

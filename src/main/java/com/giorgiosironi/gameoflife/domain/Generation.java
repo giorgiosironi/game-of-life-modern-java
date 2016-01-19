@@ -5,8 +5,8 @@ import java.util.Set;
 
 public final class Generation implements Plane {
 
-	private Set<Cell> aliveCells;
-	private ClassicRules rules;
+	private final Set<Cell> aliveCells;
+	private final ClassicRules rules;
 
 	private Generation(Set<Cell> set) {
 		this.aliveCells = set;

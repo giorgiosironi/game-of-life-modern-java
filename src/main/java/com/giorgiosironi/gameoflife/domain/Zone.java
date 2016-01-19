@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 
 public final class Zone implements Iterable<Cell> {
 
-	private Set<Cell> set;
+	private final Set<Cell> set;
 
 	private Zone(Set<Cell> set) {
 		this.set = set;
