@@ -187,8 +187,8 @@ public class InMemoryGenerationRepositoryTest {
 		}	
 	}
 	
-	// TODO: separate in another suite, it takes so long to run
-	@Test
+	// takes very long to run
+	//@Test
 	public void concurrentAccessesToTheSamePlaneNeverLosesReturnedGenerationsAsFutureSureHits() throws InterruptedException {
 		iterations = 1000;
 		int generations = 100;
