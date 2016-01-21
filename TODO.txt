@@ -1,5 +1,7 @@
-- compiler warnings for the usage of signal handling
+- experiment with Hibernate for persistence
+- deploy with Gradle inside Tomcat or Glassfish
+- install Findbugs (maybe with Gradle) for concurrency static analysis
 
 Evolutions:
 - multiple instances of the plane, making persistence into any database necessary (MongoDB driver)
-- performance optimization along with tests of these data structures
+- performance optimization driven by profiling
