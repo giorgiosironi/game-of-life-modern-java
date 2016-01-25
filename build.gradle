@@ -23,6 +23,16 @@ jettyRunWar {
     contextPath '/'
 }
 
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+findbugs {
+    effort 'max'
+}
 
 repositories {
     jcenter()

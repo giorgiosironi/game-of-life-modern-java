@@ -68,7 +68,7 @@ public interface GenerationRepository {
 			// TODO: better way to calculate hashCode() for int?
 			return generation.hashCode()
 				+ 31 * efficiency.hashCode()
-				+ 17 * new Integer(calculations).hashCode();
+				+ 17 * Integer.valueOf(calculations).hashCode();
 		}
 		
 		public String toString() {
