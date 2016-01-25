@@ -6,10 +6,9 @@
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>com.giorgiosironi.gameoflife.WebApplicationResourceConfig</param-value>
         </init-param>
-        <!-- the next filter (default servlet) serves static content -->
         <init-param>
-            <param-name>jersey.config.servlet.filter.forwardOn404</param-name>
-            <param-value>true</param-value>
+            <param-name>jersey.config.servlet.filter.staticContentRegex</param-name>
+            <param-value>/.*\.css</param-value>
         </init-param>
     </filter>
     

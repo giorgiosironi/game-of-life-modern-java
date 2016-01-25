@@ -1,4 +1,3 @@
-- deploy with Gradle inside Tomcat or Glassfish
 - install Hamcrest matchers and rewrite assertions with them
 - experiment with Hibernate for persistence
 - install Findbugs (maybe with Gradle) for concurrency static analysis
