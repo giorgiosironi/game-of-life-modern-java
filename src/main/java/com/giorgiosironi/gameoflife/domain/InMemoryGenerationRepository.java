@@ -26,26 +26,29 @@ public final class InMemoryGenerationRepository implements GenerationRepository 
 			name
 		);
 		
-		if (generations != null) {
-			Entry<Integer, Generation> best = generations.floorEntry(index);
-			if (best == null) {
-				// cache miss, fall through
-			} else if (best.getKey().equals(index)) {
-				logger.info(String.format("Cache hit: %s,%d", name, index));
-				return GenerationResult.hit(best.getValue());
-			} else {
-				logger.info(String.format("Partial cache hit: %s,%d", name, index));
-				Generation current = best.getValue();
-				for (int i = best.getKey() + 1; i <= index; i++) {
-					current = current.evolve();
-				}
-				generations.put(index, current);
-				return GenerationResult.partialHit(current, index - best.getKey());
-			}
+		if (generations == null) {
+			logger.info(String.format("Cache miss on generation: %s,%d", name, index));
+			return GenerationResult.miss();
 		}
 		
-		logger.info(String.format("Cache miss: %s,%d", name, index));
-		return GenerationResult.miss();
+		Entry<Integer, Generation> best = generations.floorEntry(index);
+		if (best == null) {
+			logger.info(String.format("Cache miss on index: %s,%d", name, index));
+			return GenerationResult.miss();
+		}
+		
+		if (best.getKey().equals(index)) {
+			logger.info(String.format("Cache hit: %s,%d", name, index));
+			return GenerationResult.hit(best.getValue());
+		} else {
+			logger.info(String.format("Partial cache hit: %s,%d", name, index));
+			Generation current = best.getValue();
+			for (int i = best.getKey() + 1; i <= index; i++) {
+				current = current.evolve();
+			}
+			generations.put(index, current);
+			return GenerationResult.partialHit(current, index - best.getKey());
+		}
 	}
 	
 	public int size() {
