@@ -68,7 +68,15 @@ The plane shown is a configurable window of 10x10 cells having the plane origin 
 ### Inside a server
 
 ```
-./gradlew jettyRunWar
+./gradlew war
 ```
 
-will spin up a Jetty server and deploy the WAR of the application inside it. The server can be terminated with CTRL-C and will serve requests with URLs such as [http://localhost:8080/planes/a-block-and-bar].
+will generate a WAR file at build/libs/game-of-life-*.war. This WAR file can be deployed inside a servlet container.
+
+To check how the WAR file is working, run:
+
+```
+./gradlew jettyRunWar -i
+```
+
+which will spin up a temporary Jetty 6.x (very old) container and deploy the WAR inside it.

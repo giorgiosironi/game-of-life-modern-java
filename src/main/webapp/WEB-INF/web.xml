@@ -1,14 +1,20 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
-    <servlet>
-        <servlet-name>GameOfLife</servlet-name>
-        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+    <filter>
+        <filter-name>GameOfLife</filter-name>
+        <filter-class>org.glassfish.jersey.servlet.ServletContainer</filter-class>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>com.giorgiosironi.gameoflife.WebApplicationResourceConfig</param-value>
         </init-param>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>GameOfLife</servlet-name>
+        <!-- the next filter (default servlet) serves static content -->
+        <init-param>
+            <param-name>jersey.config.servlet.filter.forwardOn404</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>GameOfLife</filter-name>
         <url-pattern>/*</url-pattern>
-    </servlet-mapping>
+    </filter-mapping>
 </web-app>

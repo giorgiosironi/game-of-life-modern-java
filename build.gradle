@@ -15,6 +15,10 @@ jar {
     }
 }
 
+war {
+    from 'src/main/resources/static'
+}
+
 jettyRunWar {
     contextPath '/'
 }
