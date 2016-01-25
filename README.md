@@ -50,6 +50,9 @@ Run
 
 to run unit, property-based and Selenium tests.
 
+
+### Standalone
+
 Then run
 
 ```
@@ -58,6 +61,14 @@ cd build/install/game-of-life
 bin/game-of-life
 ```
 
-to install an instance in the build/ subfolder. Load http://localhost:8080/planes/a-block-and-bar in your browser to see the evolution of a test plane. The patterns featured in the sample are a stable block and a rotating bar, along with a lone cell vanishing after the first generation.
+to install an instance in the build/ subfolder. Load [http://localhost:8080/planes/a-block-and-bar] in your browser to see the evolution of a test plane. The patterns featured in the sample are a stable block and a rotating bar, along with a lone cell vanishing after the first generation.
 
 The plane shown is a configurable window of 10x10 cells having the plane origin as the top corner, but the underlying engine is capable of extending the plane dimensions automatically to use all available memory.
+
+### Inside a server
+
+```
+./gradlew jettyRunWar
+```
+
+will spin up a Jetty server and deploy the WAR of the application inside it. The server can be terminated with CTRL-C and will serve requests with URLs such as [http://localhost:8080/game-of-life/planes/a-block-and-bar].
