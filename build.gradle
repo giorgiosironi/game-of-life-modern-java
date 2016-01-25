@@ -3,6 +3,7 @@ apply plugin: 'application'
 apply plugin: 'findbugs'
 apply plugin: 'war'
 apply plugin: 'jetty'
+apply plugin: 'jdepend'
 
 mainClassName = "com.giorgiosironi.gameoflife.EmbeddedJettyApplication"
 
@@ -32,6 +33,13 @@ tasks.withType(FindBugs) {
 
 findbugs {
     effort 'max'
+}
+
+tasks.withType(JDepend) {
+    reports {
+        text.enabled = true
+        xml.enabled = false
+    }
 }
 
 repositories {
